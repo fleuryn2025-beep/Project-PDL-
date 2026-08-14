@@ -93,7 +93,7 @@ const leadership = {
   certificates: [
     {
       title: "Certificate of Appreciation",
-      role: "Electrical Staff",
+      role: "Staff Electrical",
       image: `${import.meta.env.BASE_URL}awards/leadership/WPS Photo(8).jpeg`,
     },
 
