@@ -2,77 +2,77 @@ import { useState, useEffect } from "react";
 import "./App.css";
 
 function App() {
-  const awards = [
-    {
-      id: "shell-2024",
-      year: "2024",
-      number: "01",
-      rank: "03",
-      suffix: "RD",
-      type: "INTERNATIONAL COMPETITION",
-      title: "Shell Eco-marathon Asia Pacific & Middle East",
-      result: "3rd Place",
-      location: "MANDALIKA INTERNATIONAL CIRCUIT",
-      country: "LOMBOK · INDONESIA",
-      image: "/awards/shell-eco-2024/WPS Photo.jpeg",
-    },
+const awards = [
+  {
+    id: "shell-2024",
+    year: "2024",
+    number: "01",
+    rank: "03",
+    suffix: "RD",
+    type: "INTERNATIONAL COMPETITION",
+    title: "Shell Eco-marathon Asia Pacific & Middle East",
+    result: "3rd Place",
+    location: "MANDALIKA INTERNATIONAL CIRCUIT",
+    country: "LOMBOK · INDONESIA",
+    image: `${import.meta.env.BASE_URL}awards/shell-eco-2024/WPS Photo.jpeg`,
+  },
 
-    {
-      id: "kmhe-2024",
-      year: "2024",
-      number: "02",
-      rank: "03",
-      suffix: "RD",
-      type: "NATIONAL COMPETITION",
-      title: "Kontes Mobil Hemat Energi",
-      result: "3rd Place",
-      location: "JAKARTA E-PRIX CIRCUIT",
-      country: "JAKARTA · INDONESIA",
-      image: "/awards/KMHE-2024/WPS Photo(5).jpeg",
-    },
+  {
+    id: "kmhe-2024",
+    year: "2024",
+    number: "02",
+    rank: "03",
+    suffix: "RD",
+    type: "NATIONAL COMPETITION",
+    title: "Kontes Mobil Hemat Energi",
+    result: "3rd Place",
+    location: "JAKARTA E-PRIX CIRCUIT",
+    country: "JAKARTA · INDONESIA",
+    image: `${import.meta.env.BASE_URL}awards/KMHE-2024/WPS Photo(5).jpeg`,
+  },
 
-    {
-      id: "shell-2023",
-      year: "2023",
-      number: "03",
-      rank: "07",
-      suffix: "TH",
-      type: "INTERNATIONAL COMPETITION",
-      title: "Shell Eco-marathon Asia Pacific & Middle East",
-      result: "7th Place",
-      location: "MANDALIKA INTERNATIONAL CIRCUIT",
-      country: "LOMBOK · INDONESIA",
-      image: "/awards/shell-eco-2023/WPS Photo(4).jpeg",
-    },
+  {
+    id: "shell-2023",
+    year: "2023",
+    number: "03",
+    rank: "07",
+    suffix: "TH",
+    type: "INTERNATIONAL COMPETITION",
+    title: "Shell Eco-marathon Asia Pacific & Middle East",
+    result: "7th Place",
+    location: "MANDALIKA INTERNATIONAL CIRCUIT",
+    country: "LOMBOK · INDONESIA",
+    image: `${import.meta.env.BASE_URL}awards/shell-eco-2023/WPS Photo(4).jpeg`,
+  },
 
-    {
-      id: "pupr-2022",
-      year: "2022",
-      number: "04",
-      rank: "03",
-      suffix: "RD",
-      type: "NATIONAL COMPETITION",
-      title: "PUPR Electric Vehicle Time Attack Competition",
-      result: "3rd Place",
-      location: "BANDUNG",
-      country: "INDONESIA",
-      image: "/awards/pupr-2022/WPS Photo(1).jpeg",
-    },
+  {
+    id: "pupr-2022",
+    year: "2022",
+    number: "04",
+    rank: "03",
+    suffix: "RD",
+    type: "NATIONAL COMPETITION",
+    title: "PUPR Electric Vehicle Time Attack Competition",
+    result: "3rd Place",
+    location: "BANDUNG",
+    country: "INDONESIA",
+    image: `${import.meta.env.BASE_URL}awards/pupr-2022/WPS Photo(1).jpeg`,
+  },
 
-    {
-      id: "pkm-kc-2022",
-      year: "2022",
-      number: "05",
-      rank: "—",
-      suffix: "",
-      type: "NATIONAL PROGRAM",
-      title: "PKM-KC",
-      result: "Participant / Achievement",
-      location: "INDONESIA",
-      country: "",
-      image: "/awards/pkm-kc-2022/WPS Photo(2).jpeg",
-    },
-  ];
+  {
+    id: "pkm-kc-2022",
+    year: "2022",
+    number: "05",
+    rank: "—",
+    suffix: "",
+    type: "NATIONAL PROGRAM",
+    title: "PKM-KC",
+    result: "Participant / Achievement",
+    location: "INDONESIA",
+    country: "",
+    image: `${import.meta.env.BASE_URL}awards/pkm-kc-2022/WPS Photo(2).jpeg`,
+  },
+];
 
   const [selectedAward, setSelectedAward] = useState(awards[0]);
 
@@ -1318,16 +1318,30 @@ function App() {
                   </div>
 
                   <div
-                    className="evidence-image"
-                    onClick={openImage}
-                  >
-
-                    <img
-                      src={selectedAward.image}
-                      alt={`${selectedAward.title} achievement`}
-                    />
-
-                  </div>
+                  
+  className="evidence-image"
+  onClick={openImage}
+  style={{
+    width: "100%",
+    minHeight: "300px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    background: "#222",
+  }}
+>
+  <img
+    src={selectedAward.image}
+    alt={selectedAward.title}
+    style={{
+      display: "block",
+      width: "100%",
+      height: "auto",
+      maxHeight: "500px",
+      objectFit: "contain",
+    }}
+  />
+</div>
 
                 </div>
 
