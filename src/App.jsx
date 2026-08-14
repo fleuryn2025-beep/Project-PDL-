@@ -870,18 +870,11 @@ const [imageZoom, setImageZoom] = useState(1);
         </div>
 
 
-        <div className="award-evidence">
+     <div className="award-evidence">
 
   <div className="evidence-header">
-
-    <span>
-      VISUAL EVIDENCE
-    </span>
-
-    <span>
-      {selectedAward.year}
-    </span>
-
+    <span>VISUAL EVIDENCE</span>
+    <span>{selectedAward.year}</span>
   </div>
 
   <div
@@ -891,17 +884,10 @@ const [imageZoom, setImageZoom] = useState(1);
       setImageZoom(1);
     }}
   >
-
     <img
       src={selectedAward.image}
       alt={`${selectedAward.title} achievement`}
     />
-
-    <div className="image-click-hint">
-      <span>CLICK TO VIEW</span>
-      <span>↗</span>
-    </div>
-
   </div>
 
 </div>
@@ -971,106 +957,59 @@ const [imageZoom, setImageZoom] = useState(1);
 ========================= */}
 
 {isImageOpen && (
-
   <div
     className="image-lightbox"
-    onClick={() => {
-      setIsImageOpen(false);
-      setImageZoom(1);
-    }}
+    onClick={() => setIsImageOpen(false)}
   >
-
     <button
       className="lightbox-close"
-      onClick={() => {
-        setIsImageOpen(false);
-        setImageZoom(1);
-      }}
+      onClick={() => setIsImageOpen(false)}
     >
       ×
     </button>
-
 
     <div
       className="lightbox-content"
       onClick={(e) => e.stopPropagation()}
     >
+      <div className="zoom-controls">
+        <button
+          onClick={() =>
+            setImageZoom((z) => Math.max(0.5, z - 0.25))
+          }
+        >
+          −
+        </button>
 
-      <div className="lightbox-toolbar">
+        <span>{Math.round(imageZoom * 100)}%</span>
 
-        <span>
-          {selectedAward.title}
-        </span>
+        <button
+          onClick={() =>
+            setImageZoom((z) => Math.min(3, z + 0.25))
+          }
+        >
+          +
+        </button>
 
-        <div className="zoom-controls">
-
-          <button
-            onClick={() =>
-              setImageZoom((zoom) =>
-                Math.max(0.5, zoom - 0.25)
-              )
-            }
-          >
-            −
-          </button>
-
-          <span>
-            {Math.round(imageZoom * 100)}%
-          </span>
-
-          <button
-            onClick={() =>
-              setImageZoom((zoom) =>
-                Math.min(3, zoom + 0.25)
-              )
-            }
-          >
-            +
-          </button>
-
-          <button
-            onClick={() => setImageZoom(1)}
-          >
-            RESET
-          </button>
-
-        </div>
-
+        <button onClick={() => setImageZoom(1)}>
+          RESET
+        </button>
       </div>
 
-
       <div className="lightbox-image-wrapper">
-
         <img
           src={selectedAward.image}
-          alt={`${selectedAward.title} achievement`}
+          alt={selectedAward.title}
           style={{
             transform: `scale(${imageZoom})`,
           }}
         />
-
       </div>
-
-
-      <div className="lightbox-caption">
-
-        <strong>
-          {selectedAward.result}
-        </strong>
-
-        <span>
-          {selectedAward.location}
-          {selectedAward.country &&
-            ` · ${selectedAward.country}`}
-        </span>
-
-      </div>
-
     </div>
-
   </div>
-
 )}
+
+
       </main>
 
     </div>
