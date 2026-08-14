@@ -2,81 +2,135 @@ import { useState, useEffect } from "react";
 import "./App.css";
 
 function App() {
-const awards = [
-  {
-    id: "shell-2024",
-    year: "2024",
-    number: "01",
-    rank: "03",
-    suffix: "RD",
-    type: "INTERNATIONAL COMPETITION",
-    title: "Shell Eco-marathon Asia Pacific & Middle East",
-    result: "3rd Place",
-    location: "MANDALIKA INTERNATIONAL CIRCUIT",
-    country: "LOMBOK · INDONESIA",
-    image: `${import.meta.env.BASE_URL}awards/shell-eco-2024/WPS Photo.jpeg`,
-  },
+  /* =================================================
+     AWARDS DATA
+  ================================================= */
 
-  {
-    id: "kmhe-2024",
-    year: "2024",
-    number: "02",
-    rank: "03",
-    suffix: "RD",
-    type: "NATIONAL COMPETITION",
-    title: "Kontes Mobil Hemat Energi",
-    result: "3rd Place",
-    location: "JAKARTA E-PRIX CIRCUIT",
-    country: "JAKARTA · INDONESIA",
-    image: `${import.meta.env.BASE_URL}awards/KMHE-2024/WPS Photo(5).jpeg`,
-  },
+  const awards = [
+    {
+      id: "shell-2024",
+      year: "2024",
+      number: "01",
+      rank: "03",
+      suffix: "RD",
+      type: "INTERNATIONAL COMPETITION",
+      title: "Shell Eco-marathon Asia Pacific & Middle East",
+      result: "3rd Place",
+      location: "MANDALIKA INTERNATIONAL CIRCUIT",
+      country: "LOMBOK · INDONESIA",
+      image: `${import.meta.env.BASE_URL}awards/shell-eco-2024/WPS Photo.jpeg`,
+    },
 
-  {
-    id: "shell-2023",
-    year: "2023",
-    number: "03",
-    rank: "07",
-    suffix: "TH",
-    type: "INTERNATIONAL COMPETITION",
-    title: "Shell Eco-marathon Asia Pacific & Middle East",
-    result: "7th Place",
-    location: "MANDALIKA INTERNATIONAL CIRCUIT",
-    country: "LOMBOK · INDONESIA",
-    image: `${import.meta.env.BASE_URL}awards/shell-eco-2023/WPS Photo(4).jpeg`,
-  },
+    {
+      id: "kmhe-2024",
+      year: "2024",
+      number: "02",
+      rank: "03",
+      suffix: "RD",
+      type: "NATIONAL COMPETITION",
+      title: "Kontes Mobil Hemat Energi",
+      result: "3rd Place",
+      location: "JAKARTA E-PRIX CIRCUIT",
+      country: "JAKARTA · INDONESIA",
+      image: `${import.meta.env.BASE_URL}awards/KMHE-2024/WPS Photo(5).jpeg`,
+    },
 
-  {
-    id: "pupr-2022",
-    year: "2022",
-    number: "04",
-    rank: "03",
-    suffix: "RD",
-    type: "NATIONAL COMPETITION",
-    title: "PUPR Electric Vehicle Time Attack Competition",
-    result: "3rd Place",
-    location: "BANDUNG",
-    country: "INDONESIA",
-    image: `${import.meta.env.BASE_URL}awards/pupr-2022/WPS Photo(1).jpeg`,
-  },
+    {
+      id: "shell-2023",
+      year: "2023",
+      number: "03",
+      rank: "07",
+      suffix: "TH",
+      type: "INTERNATIONAL COMPETITION",
+      title: "Shell Eco-marathon Asia Pacific & Middle East",
+      result: "7th Place",
+      location: "MANDALIKA INTERNATIONAL CIRCUIT",
+      country: "LOMBOK · INDONESIA",
+      image: `${import.meta.env.BASE_URL}awards/shell-eco-2023/WPS Photo(4).jpeg`,
+    },
 
-  {
-    id: "pkm-kc-2022",
-    year: "2022",
-    number: "05",
-    rank: "—",
-    suffix: "",
-    type: "NATIONAL PROGRAM",
-    title: "PKM-KC",
-    result: "Participant / Achievement",
-    location: "INDONESIA",
-    country: "",
-    image: `${import.meta.env.BASE_URL}awards/pkm-kc-2022/WPS Photo(2).jpeg`,
-  },
-];
+    {
+      id: "pupr-2022",
+      year: "2022",
+      number: "04",
+      rank: "03",
+      suffix: "RD",
+      type: "NATIONAL COMPETITION",
+      title: "PUPR Electric Vehicle Time Attack Competition",
+      result: "3rd Place",
+      location: "BANDUNG",
+      country: "INDONESIA",
+      image: `${import.meta.env.BASE_URL}awards/pupr-2022/WPS Photo(1).jpeg`,
+    },
+
+    {
+      id: "pkm-kc-2022",
+      year: "2022",
+      number: "05",
+      rank: "—",
+      suffix: "",
+      type: "NATIONAL PROGRAM",
+      title: "PKM-KC",
+      result: "Participant / Achievement",
+      location: "INDONESIA",
+      country: "",
+      image: `${import.meta.env.BASE_URL}awards/pkm-kc-2022/WPS Photo(2).jpeg`,
+    },
+  ];
+
+  /* =================================================
+     LEADERSHIP DATA
+  ================================================= */
+
+  const leadership = {
+    organization: "KHAD ECO TEAM UMY",
+
+    position:
+      "Electrical Staff → Chief Electrical → Deputy General Manager",
+
+    period: "2021 — 2024",
+
+    certificates: [
+      {
+        title: "Certificate of Appreciation",
+        role: "Deputy General Manager",
+        image: `${import.meta.env.BASE_URL}awards/leadership/WPS Photo(8).jpeg`,
+      },
+
+      {
+        title: "Certificate of Appreciation",
+        role: "Leadership Achievement",
+        image: `${import.meta.env.BASE_URL}awards/leadership/WPS Photo(9).jpeg`,
+      },
+
+      {
+        title: "Certificate of Appreciation",
+        role: "Leadership Achievement",
+        image: `${import.meta.env.BASE_URL}awards/leadership/WPS Photo(10).jpeg`,
+      },
+    ],
+  };
+
+  /* =================================================
+     AWARD STATE
+  ================================================= */
 
   const [selectedAward, setSelectedAward] = useState(awards[0]);
 
+  /* =================================================
+     LIGHTBOX STATE
+
+     PENTING:
+     lightboxImage dipisahkan dari selectedAward
+     agar sertifikat Leadership tidak mengubah
+     gambar pada bagian Awards.
+  ================================================= */
+
   const [isImageOpen, setIsImageOpen] = useState(false);
+
+  const [lightboxImage, setLightboxImage] = useState(null);
+
+  const [lightboxTitle, setLightboxTitle] = useState("");
 
   const [imageZoom, setImageZoom] = useState(1);
 
@@ -92,11 +146,10 @@ const awards = [
     y: 0,
   });
 
-  /*
-  ==========================================
-  RESET IMAGE POSITION
-  ==========================================
-  */
+  /* =================================================
+     RESET IMAGE
+  ================================================= */
+
   const resetImage = () => {
     setImageZoom(1);
 
@@ -106,58 +159,84 @@ const awards = [
     });
   };
 
-  /*
-  ==========================================
-  OPEN IMAGE
-  ==========================================
-  */
+  /* =================================================
+     OPEN AWARD IMAGE
+  ================================================= */
+
   const openImage = () => {
+    setLightboxImage(selectedAward.image);
+
+    setLightboxTitle(selectedAward.title);
+
     resetImage();
+
     setIsImageOpen(true);
   };
 
-  /*
-  ==========================================
-  CLOSE IMAGE
-  ==========================================
-  */
+  /* =================================================
+     OPEN LEADERSHIP CERTIFICATE
+  ================================================= */
+
+  const openLeadershipCertificate = (certificate) => {
+    setLightboxImage(certificate.image);
+
+    setLightboxTitle(certificate.title);
+
+    resetImage();
+
+    setIsImageOpen(true);
+  };
+
+  /* =================================================
+     CLOSE IMAGE
+  ================================================= */
+
   const closeImage = () => {
     setIsImageOpen(false);
+
+    setLightboxImage(null);
+
+    setLightboxTitle("");
+
     resetImage();
   };
 
-  /*
-  ==========================================
-  CHANGE AWARD
-  ==========================================
-  */
+  /* =================================================
+     CHANGE AWARD
+  ================================================= */
+
   const handleAwardChange = (award) => {
     setSelectedAward(award);
 
     setIsImageOpen(false);
 
+    setLightboxImage(null);
+
+    setLightboxTitle("");
+
     resetImage();
   };
 
-  /*
-  ==========================================
-  ZOOM IN
-  ==========================================
-  */
+  /* =================================================
+     ZOOM IN
+  ================================================= */
+
   const zoomIn = () => {
     setImageZoom((currentZoom) =>
       Math.min(4, currentZoom + 0.25)
     );
   };
 
-  /*
-  ==========================================
-  ZOOM OUT
-  ==========================================
-  */
+  /* =================================================
+     ZOOM OUT
+  ================================================= */
+
   const zoomOut = () => {
     setImageZoom((currentZoom) => {
-      const newZoom = Math.max(0.5, currentZoom - 0.25);
+      const newZoom = Math.max(
+        0.5,
+        currentZoom - 0.25
+      );
 
       if (newZoom <= 1) {
         setImagePosition({
@@ -170,11 +249,10 @@ const awards = [
     });
   };
 
-  /*
-  ==========================================
-  MOUSE WHEEL ZOOM
-  ==========================================
-  */
+  /* =================================================
+     MOUSE WHEEL ZOOM
+  ================================================= */
+
   const handleWheelZoom = (e) => {
     e.preventDefault();
 
@@ -201,11 +279,10 @@ const awards = [
     }
   };
 
-  /*
-  ==========================================
-  START DRAG
-  ==========================================
-  */
+  /* =================================================
+     START DRAG
+  ================================================= */
+
   const handleMouseDown = (e) => {
     if (imageZoom <= 1) return;
 
@@ -219,11 +296,10 @@ const awards = [
     });
   };
 
-  /*
-  ==========================================
-  DRAG IMAGE
-  ==========================================
-  */
+  /* =================================================
+     DRAG IMAGE
+  ================================================= */
+
   const handleMouseMove = (e) => {
     if (!isDragging) return;
 
@@ -233,24 +309,22 @@ const awards = [
     });
   };
 
-  /*
-  ==========================================
-  STOP DRAG
-  ==========================================
-  */
+  /* =================================================
+     STOP DRAG
+  ================================================= */
+
   const handleMouseUp = () => {
     setIsDragging(false);
   };
 
-  /*
-  ==========================================
-  ESC KEY TO CLOSE
-  ==========================================
-  */
+  /* =================================================
+     ESC KEY TO CLOSE
+  ================================================= */
+
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === "Escape") {
-        setIsImageOpen(false);
+        closeImage();
       }
     };
 
@@ -267,11 +341,10 @@ const awards = [
     };
   }, []);
 
-  /*
-  ==========================================
-  LOCK BODY SCROLL WHEN LIGHTBOX OPEN
-  ==========================================
-  */
+  /* =================================================
+     LOCK BODY SCROLL WHEN LIGHTBOX OPEN
+  ================================================= */
+
   useEffect(() => {
     if (isImageOpen) {
       document.body.style.overflow = "hidden";
@@ -287,24 +360,44 @@ const awards = [
   return (
     <div className="portfolio">
 
-      {/* =========================
+      {/* =================================================
           NAVBAR
-      ========================= */}
+      ================================================= */}
 
       <header className="navbar">
+
         <div className="nav-container">
 
           <div className="logo">
-            ADI<span>.</span>
+            ISNAINI ADI SANTOSO
           </div>
 
           <nav className="nav-menu">
-            <a href="#home">Home</a>
-            <a href="#about">About</a>
-            <a href="#experience">Experience</a>
-            <a href="#awards">Awards</a>
-            <a href="#certificates">Certificates</a>
-            <a href="#contact">Contact</a>
+
+            <a href="#home">
+              Home
+            </a>
+
+            <a href="#about">
+              About
+            </a>
+
+            <a href="#experience">
+              Experience
+            </a>
+
+            <a href="#awards">
+              Awards
+            </a>
+
+            <a href="#certificates">
+              Certificates
+            </a>
+
+            <a href="#contact">
+              Contact
+            </a>
+
           </nav>
 
           <button className="resume-button">
@@ -312,12 +405,13 @@ const awards = [
           </button>
 
         </div>
+
       </header>
 
 
-      {/* =========================
+      {/* =================================================
           HERO
-      ========================= */}
+      ================================================= */}
 
       <main id="home">
 
@@ -334,7 +428,9 @@ const awards = [
               <h1>
                 Engineering
                 <br />
-                <span>Ideas Into Reality.</span>
+                <span>
+                  Ideas Into Reality.
+                </span>
               </h1>
 
               <p className="hero-description">
@@ -365,18 +461,33 @@ const awards = [
               <div className="hero-stats">
 
                 <div className="stat">
-                  <strong>02+</strong>
-                  <span>Years Experience</span>
+                  <strong>
+                    02+
+                  </strong>
+
+                  <span>
+                    Years Experience
+                  </span>
                 </div>
 
                 <div className="stat">
-                  <strong>10+</strong>
-                  <span>Projects</span>
+                  <strong>
+                    10+
+                  </strong>
+
+                  <span>
+                    Projects
+                  </span>
                 </div>
 
                 <div className="stat">
-                  <strong>03+</strong>
-                  <span>Industries</span>
+                  <strong>
+                    03+
+                  </strong>
+
+                  <span>
+                    Industries
+                  </span>
                 </div>
 
               </div>
@@ -391,8 +502,13 @@ const awards = [
               <div className="engineer-card">
 
                 <div className="card-top">
-                  <span>ENGINEERING</span>
-                  <span>01</span>
+                  <span>
+                    ENGINEERING
+                  </span>
+
+                  <span>
+                    01
+                  </span>
                 </div>
 
                 <div className="engineer-symbol">
@@ -400,8 +516,15 @@ const awards = [
                 </div>
 
                 <div className="card-bottom">
-                  <span>ELECTRICAL</span>
-                  <span>PROJECTS</span>
+
+                  <span>
+                    ELECTRICAL
+                  </span>
+
+                  <span>
+                    PROJECTS
+                  </span>
+
                 </div>
 
               </div>
@@ -425,9 +548,9 @@ const awards = [
         </section>
 
 
-        {/* =========================
+        {/* =================================================
             ABOUT
-        ========================= */}
+        ================================================= */}
 
         <section
           className="about-section"
@@ -451,6 +574,7 @@ const awards = [
                 <h2>
                   Electrical Engineering
                   <br />
+
                   <span>
                     with a Project Mindset.
                   </span>
@@ -573,21 +697,30 @@ const awards = [
             <div className="about-footer">
 
               <div>
-                <span>BASED IN</span>
+                <span>
+                  BASED IN
+                </span>
+
                 <strong>
                   Yogyakarta, Indonesia
                 </strong>
               </div>
 
               <div>
-                <span>AVAILABILITY</span>
+                <span>
+                  AVAILABILITY
+                </span>
+
                 <strong>
                   Open to Opportunities
                 </strong>
               </div>
 
               <div>
-                <span>ENGINEERING</span>
+                <span>
+                  ENGINEERING
+                </span>
+
                 <strong>
                   Electrical • Instrumentation • Projects
                 </strong>
@@ -600,9 +733,9 @@ const awards = [
         </section>
 
 
-        {/* =========================
+        {/* =================================================
             EXPERIENCE
-        ========================= */}
+        ================================================= */}
 
         <section
           className="experience-section"
@@ -626,6 +759,7 @@ const awards = [
                 <h2>
                   Experience Built
                   <br />
+
                   <span>
                     Through Field & Engineering.
                   </span>
@@ -657,12 +791,15 @@ const awards = [
               <article className="experience-item featured">
 
                 <div className="experience-marker">
-                  <span>01</span>
+                  <span>
+                    01
+                  </span>
                 </div>
 
                 <div className="experience-content">
 
                   <div className="experience-meta">
+
                     <span>
                       APR 2025 — MAR 2026
                     </span>
@@ -670,6 +807,7 @@ const awards = [
                     <span>
                       MINAS, RIAU
                     </span>
+
                   </div>
 
                   <h3>
@@ -758,12 +896,15 @@ const awards = [
               <article className="experience-item">
 
                 <div className="experience-marker">
-                  <span>02</span>
+                  <span>
+                    02
+                  </span>
                 </div>
 
                 <div className="experience-content">
 
                   <div className="experience-meta">
+
                     <span>
                       JAN 2025 — APR 2025
                     </span>
@@ -771,6 +912,7 @@ const awards = [
                     <span>
                       YOGYAKARTA
                     </span>
+
                   </div>
 
                   <h3>
@@ -841,12 +983,15 @@ const awards = [
               <article className="experience-item">
 
                 <div className="experience-marker">
-                  <span>03</span>
+                  <span>
+                    03
+                  </span>
                 </div>
 
                 <div className="experience-content">
 
                   <div className="experience-meta">
+
                     <span>
                       JAN 2024 — FEB 2025
                     </span>
@@ -854,6 +999,7 @@ const awards = [
                     <span>
                       PROBOLINGGO
                     </span>
+
                   </div>
 
                   <h3>
@@ -923,7 +1069,9 @@ const awards = [
               <article className="experience-item">
 
                 <div className="experience-marker">
-                  <span>04</span>
+                  <span>
+                    04
+                  </span>
                 </div>
 
                 <div className="experience-content">
@@ -1002,7 +1150,9 @@ const awards = [
               <article className="experience-item">
 
                 <div className="experience-marker">
-                  <span>05</span>
+                  <span>
+                    05
+                  </span>
                 </div>
 
                 <div className="experience-content">
@@ -1100,28 +1250,40 @@ const awards = [
             <div className="experience-summary">
 
               <div className="summary-item">
-                <strong>05</strong>
+                <strong>
+                  05
+                </strong>
+
                 <span>
                   Professional Roles
                 </span>
               </div>
 
               <div className="summary-item">
-                <strong>E&I</strong>
+                <strong>
+                  E&I
+                </strong>
+
                 <span>
                   Primary Engineering Focus
                 </span>
               </div>
 
               <div className="summary-item">
-                <strong>EPC</strong>
+                <strong>
+                  EPC
+                </strong>
+
                 <span>
                   Project Environment
                 </span>
               </div>
 
               <div className="summary-item">
-                <strong>FIELD</strong>
+                <strong>
+                  FIELD
+                </strong>
+
                 <span>
                   Execution Experience
                 </span>
@@ -1134,9 +1296,9 @@ const awards = [
         </section>
 
 
-        {/* =========================
+        {/* =================================================
             AWARDS
-        ========================= */}
+        ================================================= */}
 
         <section
           className="awards-section"
@@ -1161,11 +1323,13 @@ const awards = [
 
               </div>
 
+
               <div className="awards-header-right">
 
                 <h2>
                   Recognition
                   <br />
+
                   <span>
                     Beyond Engineering.
                   </span>
@@ -1181,11 +1345,13 @@ const awards = [
             </div>
 
 
-            {/* AWARDS CONTENT */}
+            {/* =================================================
+                AWARDS CONTENT
+            ================================================= */}
 
             <div className="awards-interactive">
 
-              {/* LEFT */}
+              {/* LEFT — AWARD LIST */}
 
               <div className="awards-selector">
 
@@ -1193,6 +1359,7 @@ const awards = [
 
                   <button
                     key={award.id}
+                    type="button"
                     className={`award-selector-item ${
                       selectedAward.id === award.id
                         ? "active"
@@ -1206,6 +1373,7 @@ const awards = [
                     <div className="selector-year">
                       {award.year}
                     </div>
+
 
                     <div className="selector-content">
 
@@ -1223,6 +1391,7 @@ const awards = [
 
                     </div>
 
+
                     <div className="selector-arrow">
                       ↗
                     </div>
@@ -1234,7 +1403,7 @@ const awards = [
               </div>
 
 
-              {/* RIGHT */}
+              {/* RIGHT — AWARD DETAIL */}
 
               <div className="award-detail">
 
@@ -1284,6 +1453,7 @@ const awards = [
                       {selectedAward.result}
                     </p>
 
+
                     <div className="award-detail-location">
 
                       <span>
@@ -1301,7 +1471,9 @@ const awards = [
                 </div>
 
 
-                {/* IMAGE */}
+                {/* =================================================
+                    VISUAL EVIDENCE
+                ================================================= */}
 
                 <div className="award-evidence">
 
@@ -1317,36 +1489,25 @@ const awards = [
 
                   </div>
 
+
                   <div
-                  
-  className="evidence-image"
-  onClick={openImage}
-  style={{
-    width: "100%",
-    minHeight: "300px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    background: "#222",
-  }}
->
-  <img
-    src={selectedAward.image}
-    alt={selectedAward.title}
-    style={{
-      display: "block",
-      width: "100%",
-      height: "auto",
-      maxHeight: "500px",
-      objectFit: "contain",
-    }}
-  />
-</div>
+                    className="evidence-image"
+                    onClick={openImage}
+                  >
+
+                    <img
+                      src={selectedAward.image}
+                      alt={selectedAward.title}
+                    />
+
+                  </div>
 
                 </div>
 
 
-                {/* CERTIFICATE */}
+                {/* =================================================
+                    CERTIFICATE
+                ================================================= */}
 
                 <div className="award-certificate">
 
@@ -1373,32 +1534,106 @@ const awards = [
             </div>
 
 
-            {/* LEADERSHIP */}
+            {/* =================================================
+                LEADERSHIP
+            ================================================= */}
 
             <div className="awards-footer">
+
+              {/* LEFT */}
 
               <div className="awards-footer-label">
                 LEADERSHIP
               </div>
 
-              <div className="awards-footer-content">
 
-                <div>
+              {/* RIGHT */}
 
-                  <span>
-                    KHAD ECO TEAM UMY
+              <div className="leadership-content">
+
+                {/* INFORMATION */}
+
+                <div className="leadership-info">
+
+                  <span className="leadership-organization">
+                    {leadership.organization}
                   </span>
 
                   <strong>
-                    Electrical Staff → Chief Electrical
-                    → Deputy General Manager
+                    {leadership.position}
                   </strong>
+
+                  <span className="leadership-period">
+                    {leadership.period}
+                  </span>
 
                 </div>
 
-                <span className="awards-footer-year">
-                  2021 — 2024
-                </span>
+
+                {/* CERTIFICATES */}
+
+                <div className="leadership-certificates">
+
+                  <div className="leadership-certificates-header">
+
+                    <span>
+                      CERTIFICATES
+                    </span>
+
+                    <span>
+                      03 DOCUMENTS
+                    </span>
+
+                  </div>
+
+
+                  <div className="leadership-certificate-grid">
+
+                    {leadership.certificates.map(
+                      (certificate, index) => (
+
+                        <div
+                          className="leadership-certificate"
+                          key={index}
+                        >
+
+                          <div
+                            className="leadership-certificate-image"
+                            onClick={() =>
+                              openLeadershipCertificate(
+                                certificate
+                              )
+                            }
+                          >
+
+                            <img
+                              src={certificate.image}
+                              alt={certificate.title}
+                            />
+
+                          </div>
+
+
+                          <div className="leadership-certificate-meta">
+
+                            <span>
+                              {certificate.title}
+                            </span>
+
+                            <p>
+                              {certificate.role}
+                            </p>
+
+                          </div>
+
+                        </div>
+
+                      )
+                    )}
+
+                  </div>
+
+                </div>
 
               </div>
 
@@ -1409,11 +1644,11 @@ const awards = [
         </section>
 
 
-        {/* =========================
+        {/* =================================================
             IMAGE LIGHTBOX
-        ========================= */}
+        ================================================= */}
 
-        {isImageOpen && (
+        {isImageOpen && lightboxImage && (
 
           <div
             className="image-lightbox"
@@ -1456,7 +1691,9 @@ const awards = [
                 </button>
 
                 <span>
-                  {Math.round(imageZoom * 100)}%
+                  {Math.round(
+                    imageZoom * 100
+                  )}%
                 </span>
 
                 <button
@@ -1488,8 +1725,8 @@ const awards = [
               >
 
                 <img
-                  src={selectedAward.image}
-                  alt={selectedAward.title}
+                  src={lightboxImage}
+                  alt={lightboxTitle}
                   draggable="false"
                   style={{
                     transform: `
@@ -1499,6 +1736,7 @@ const awards = [
                       )
                       scale(${imageZoom})
                     `,
+
                     cursor:
                       imageZoom > 1
                         ? isDragging

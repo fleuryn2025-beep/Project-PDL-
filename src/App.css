@@ -1,9 +1,28 @@
-/* ========================================
+/* =========================================================
    GLOBAL PORTFOLIO
-======================================== */
+========================================================= */
 
 * {
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #080a0f;
+  color: #f4f5f7;
+  font-family: inherit;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
 }
 
 .portfolio {
@@ -13,9 +32,9 @@
 }
 
 
-/* ========================================
+/* =========================================================
    NAVBAR
-======================================== */
+========================================================= */
 
 .navbar {
   position: fixed;
@@ -29,6 +48,7 @@
   background: rgba(8, 10, 15, 0.82);
 
   backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 }
 
 .nav-container {
@@ -44,7 +64,7 @@
 }
 
 .logo {
-  font-size: 25px;
+  font-size: 42px;
   font-weight: 800;
   letter-spacing: -1px;
 }
@@ -66,7 +86,7 @@
   font-size: 13px;
   font-weight: 500;
 
-  transition: 0.3s ease;
+  transition: color 0.3s ease;
 }
 
 .nav-menu a:hover {
@@ -87,7 +107,9 @@
 
   font-size: 13px;
 
-  transition: 0.3s ease;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
 }
 
 .resume-button:hover {
@@ -96,9 +118,9 @@
 }
 
 
-/* ========================================
+/* =========================================================
    HERO
-======================================== */
+========================================================= */
 
 .hero {
   min-height: 100vh;
@@ -203,7 +225,11 @@
   font-size: 13px;
   font-weight: 600;
 
-  transition: 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .primary-button {
@@ -257,9 +283,9 @@
 }
 
 
-/* ========================================
+/* =========================================================
    HERO VISUAL
-======================================== */
+========================================================= */
 
 .hero-visual {
   position: relative;
@@ -297,6 +323,13 @@
       black 30%,
       transparent 72%
     );
+
+  -webkit-mask-image:
+    radial-gradient(
+      circle,
+      black 30%,
+      transparent 72%
+    );
 }
 
 .engineer-card {
@@ -323,6 +356,7 @@
     );
 
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 
   box-shadow:
     0 40px 100px rgba(0, 0, 0, 0.45);
@@ -383,6 +417,7 @@
   background: rgba(15, 18, 27, 0.85);
 
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 
   color: #c4c8d4;
 
@@ -410,9 +445,9 @@
 }
 
 
-/* ========================================
+/* =========================================================
    PLACEHOLDER
-======================================== */
+========================================================= */
 
 .placeholder-section {
   min-height: 300px;
@@ -432,97 +467,9 @@
 }
 
 
-/* ========================================
-   HERO RESPONSIVE
-======================================== */
-
-@media (max-width: 1000px) {
-
-  .nav-menu {
-    display: none;
-  }
-
-  .hero-container {
-    grid-template-columns: 1fr;
-
-    padding-top: 100px;
-  }
-
-  .hero-content {
-    max-width: 800px;
-  }
-
-  .hero-visual {
-    height: 500px;
-  }
-}
-
-
-@media (max-width: 600px) {
-
-  .nav-container {
-    padding: 0 22px;
-  }
-
-  .hero-container {
-    padding: 70px 22px;
-  }
-
-  .hero h1 {
-    font-size: 52px;
-
-    letter-spacing: -3px;
-  }
-
-  .hero-description {
-    font-size: 15px;
-  }
-
-  .hero-buttons {
-    flex-direction: column;
-
-    align-items: flex-start;
-  }
-
-  .hero-stats {
-    gap: 25px;
-  }
-
-  .hero-visual {
-    height: 430px;
-  }
-
-  .engineer-card {
-    width: 290px;
-    height: 390px;
-  }
-
-  .visual-grid {
-    width: 350px;
-    height: 350px;
-  }
-
-  .floating-tag {
-    font-size: 9px;
-  }
-
-  .tag-one {
-    left: 0;
-  }
-
-  .tag-two {
-    right: 0;
-  }
-
-  .tag-three {
-    left: 0;
-  }
-}
-
-
-/* ========================================
+/* =========================================================
    ABOUT SECTION
-======================================== */
+========================================================= */
 
 .about-section {
   padding: 140px 0 120px;
@@ -658,7 +605,10 @@
 
   background: rgba(255, 255, 255, 0.025);
 
-  transition: 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    transform 0.3s ease,
+    background 0.3s ease;
 }
 
 .detail-card:hover {
@@ -783,53 +733,9 @@
 }
 
 
-/* ABOUT RESPONSIVE */
-
-@media (max-width: 900px) {
-
-  .about-grid {
-    grid-template-columns: 1fr;
-
-    gap: 60px;
-  }
-
-  .about-footer {
-    grid-template-columns: 1fr;
-  }
-}
-
-
-@media (max-width: 600px) {
-
-  .about-section {
-    padding: 100px 0 80px;
-  }
-
-  .section-container {
-    padding: 0 22px;
-  }
-
-  .section-heading {
-    gap: 16px;
-
-    margin-bottom: 55px;
-  }
-
-  .section-heading h2 {
-    font-size: 42px;
-
-    letter-spacing: -2px;
-  }
-
-  .about-lead {
-    font-size: 20px;
-  }
-}
-
-
-/* ========================================
+/* =========================================================
    EXPERIENCE SECTION
-======================================== */
+========================================================= */
 
 .experience-section {
   padding: 150px 0 130px;
@@ -852,7 +758,8 @@
   max-width: 720px;
 
   margin:
-    -35px 0
+    -35px
+    0
     90px
     90px;
 }
@@ -940,7 +847,9 @@
 
   z-index: 2;
 
-  transition: 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .experience-marker span {
@@ -975,7 +884,7 @@
 
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 
-  transition: 0.3s ease;
+  transition: transform 0.3s ease;
 }
 
 .experience-item:hover .experience-content {
@@ -1206,113 +1115,9 @@
 }
 
 
-/* EXPERIENCE RESPONSIVE */
-
-@media (max-width: 800px) {
-
-  .experience-section {
-    padding: 110px 0 90px;
-  }
-
-  .experience-timeline {
-    padding-left: 65px;
-  }
-
-  .experience-timeline::before {
-    left: 17px;
-  }
-
-  .experience-marker {
-    left: -65px;
-
-    width: 35px;
-    height: 35px;
-  }
-
-  .experience-marker span {
-    font-size: 8px;
-  }
-
-  .experience-item {
-    padding-bottom: 65px;
-  }
-
-  .experience-item.featured .experience-content {
-    padding: 22px;
-  }
-
-  .experience-content h3 {
-    font-size: 30px;
-  }
-
-  .experience-meta {
-    flex-direction: column;
-
-    gap: 7px;
-  }
-
-  .experience-summary {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-
-@media (max-width: 600px) {
-
-  .experience-intro {
-    margin:
-      -25px
-      0
-      60px
-      0;
-  }
-
-  .experience-intro p {
-    font-size: 14px;
-  }
-
-  .experience-timeline {
-    padding-left: 45px;
-  }
-
-  .experience-timeline::before {
-    left: 12px;
-  }
-
-  .experience-marker {
-    left: -45px;
-
-    width: 27px;
-    height: 27px;
-  }
-
-  .experience-marker span {
-    font-size: 7px;
-  }
-
-  .experience-content h3 {
-    font-size: 25px;
-
-    letter-spacing: -1px;
-  }
-
-  .experience-content h4 {
-    font-size: 13px;
-  }
-
-  .experience-description {
-    font-size: 13px;
-  }
-
-  .experience-summary {
-    grid-template-columns: 1fr;
-  }
-}
-
-
-/* ========================================
+/* =========================================================
    AWARDS SECTION
-======================================== */
+========================================================= */
 
 .awards-section {
   padding: 150px 0 130px;
@@ -1328,11 +1133,6 @@
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-
-/* ========================================
-   AWARDS CONTAINER
-======================================== */
-
 .awards-container {
   width: min(1180px, calc(100% - 80px));
 
@@ -1340,9 +1140,9 @@
 }
 
 
-/* ========================================
+/* =========================================================
    AWARDS HEADER
-======================================== */
+========================================================= */
 
 .awards-header {
   display: grid;
@@ -1415,9 +1215,9 @@
 }
 
 
-/* ========================================
+/* =========================================================
    AWARDS INTERACTIVE
-======================================== */
+========================================================= */
 
 .awards-interactive {
   display: grid;
@@ -1430,9 +1230,9 @@
 }
 
 
-/* ========================================
+/* =========================================================
    AWARD SELECTOR
-======================================== */
+========================================================= */
 
 .awards-selector {
   display: flex;
@@ -1588,9 +1388,9 @@
 }
 
 
-/* ========================================
+/* =========================================================
    AWARD DETAIL
-======================================== */
+========================================================= */
 
 .award-detail {
   position: relative;
@@ -1614,16 +1414,13 @@
 }
 
 @keyframes awardDetailIn {
-
   from {
     opacity: 0;
-
     transform: translateY(8px);
   }
 
   to {
     opacity: 1;
-
     transform: translateY(0);
   }
 }
@@ -1771,10 +1568,9 @@
 }
 
 
-/* ========================================
-   VISUAL EVIDENCE
-   FOTO TIDAK DI-CROP
-======================================== */
+/* =========================================================
+   AWARD EVIDENCE IMAGE
+========================================================= */
 
 .award-evidence {
   margin-top: 5px;
@@ -1800,22 +1596,18 @@
   letter-spacing: 1.8px;
 }
 
-
-/*
-   IMPORTANT
-
-   Foto portrait dan landscape:
-   - tidak menggunakan fixed height
-   - tidak menggunakan object-fit: cover
-   - mengikuti aspect ratio asli
-*/
-
 .evidence-image {
   position: relative;
 
   width: 100%;
 
-  display: block;
+  min-height: 235px;
+  max-height: 520px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
 
   overflow: hidden;
 
@@ -1831,25 +1623,23 @@
   height: auto;
 
   max-width: 100%;
+  max-height: 520px;
 
   object-fit: contain;
+  object-position: center;
+
+  transition: transform 0.5s ease;
+
+  visibility: visible;
+  opacity: 1;
 }
-
-
-/* IMAGE HOVER */
 
 .evidence-image:hover img {
-  transform: scale(1.015);
-}
-
-.evidence-image img {
-  transition: transform 0.35s ease;
+  transform: scale(1.03);
 }
 
 
-/* ========================================
-   IMAGE CLICK HINT
-======================================== */
+/* IMAGE CLICK HINT */
 
 .image-click-hint {
   position: absolute;
@@ -1885,15 +1675,58 @@
 }
 
 
-/* ========================================
-   CERTIFICATE
-======================================== */
+/* OLD OVERLAY SUPPORT */
+
+.image-view-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  background: rgba(5, 8, 14, 0.55);
+
+  opacity: 0;
+
+  transition: opacity 0.3s ease;
+
+  pointer-events: none;
+}
+
+.evidence-image:hover .image-view-overlay {
+  opacity: 1;
+}
+
+.image-view-overlay span:first-child {
+  color: #ffffff;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.15em;
+}
+
+.view-icon {
+  color: #ffffff;
+
+  font-size: 18px;
+}
+
+
+/* =========================================================
+   AWARD CERTIFICATE
+========================================================= */
 
 .award-certificate {
   display: flex;
 
   justify-content: space-between;
-
   align-items: center;
 
   gap: 20px;
@@ -1944,9 +1777,9 @@
 }
 
 
-/* ========================================
-   LEADERSHIP / AWARDS FOOTER
-======================================== */
+/* =========================================================
+   LEADERSHIP
+========================================================= */
 
 .awards-footer {
   display: grid;
@@ -1955,7 +1788,7 @@
 
   gap: 80px;
 
-  margin-top: 75px;
+  margin-top: 40px;
 
   padding-top: 30px;
 
@@ -1972,23 +1805,23 @@
   letter-spacing: 2px;
 }
 
-.awards-footer-content {
-  display: flex;
-
-  justify-content: space-between;
-
-  gap: 30px;
-}
-
-.awards-footer-content > div {
+.leadership-content {
   display: flex;
 
   flex-direction: column;
 
-  gap: 9px;
+  gap: 35px;
 }
 
-.awards-footer-content span {
+.leadership-info {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+.leadership-organization {
   color: #7c8cff;
 
   font-size: 8px;
@@ -1998,26 +1831,709 @@
   letter-spacing: 1.7px;
 }
 
-.awards-footer-content strong {
+.leadership-info strong {
   color: #c7cbd4;
 
-  font-size: 12px;
-
-  line-height: 1.6;
+  font-size: 13px;
 
   font-weight: 500;
 }
 
-.awards-footer-year {
-  color: #596274 !important;
+.leadership-period {
+  color: #596274;
 
-  white-space: nowrap;
+  font-size: 9px;
+
+  letter-spacing: 1.5px;
 }
 
 
-/* ========================================
-   AWARDS RESPONSIVE — TABLET
-======================================== */
+/* CERTIFICATE LIST */
+
+.leadership-certificates {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 15px;
+}
+
+.leadership-certificates-header {
+  display: flex;
+
+  justify-content: space-between;
+}
+
+.leadership-certificates-header span {
+  color: #7c8cff;
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  letter-spacing: 1.7px;
+}
+
+.leadership-certificates-header span:last-child {
+  color: #596274;
+}
+
+
+/* CERTIFICATE GRID */
+
+.leadership-certificate-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 14px;
+}
+
+
+/* CERTIFICATE */
+
+.leadership-certificate {
+  position: relative;
+}
+
+.leadership-certificate-image {
+  width: 100%;
+
+  background: #15181e;
+
+  overflow: hidden;
+
+  cursor: zoom-in;
+}
+
+.leadership-certificate-image img {
+  display: block;
+
+  width: 100%;
+  height: auto;
+
+  object-fit: contain;
+
+  transition: transform 0.3s ease;
+}
+
+.leadership-certificate-image:hover img {
+  transform: scale(1.02);
+}
+
+
+/* CERTIFICATE INFO */
+
+.leadership-certificate-meta {
+  margin-top: 12px;
+}
+
+.leadership-certificate-meta span {
+  color: #c7cbd4;
+
+  font-size: 9px;
+
+  font-weight: 600;
+}
+
+.leadership-certificate-meta p {
+  margin: 5px 0 0;
+
+  color: #596274;
+
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   PROJECT DETAIL BUTTON
+========================================================= */
+
+.view-details-btn {
+  margin-top: 20px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 10px 18px;
+
+  background: transparent;
+
+  color: #ffffff;
+
+  border: 1px solid rgba(255, 255, 255, 0.18);
+
+  border-radius: 8px;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.view-details-btn span {
+  font-size: 16px;
+
+  transition: transform 0.3s ease;
+}
+
+.view-details-btn:hover {
+  background: rgba(124, 140, 255, 0.12);
+
+  border-color: rgba(124, 140, 255, 0.5);
+
+  transform: translateY(-2px);
+}
+
+.view-details-btn:hover span {
+  transform: translate(3px, -3px);
+}
+
+
+/* =========================================================
+   PROJECT MODAL
+========================================================= */
+
+.project-modal {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 9999;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+
+  opacity: 0;
+
+  visibility: hidden;
+
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+}
+
+.project-modal.active {
+  opacity: 1;
+
+  visibility: visible;
+}
+
+
+/* MODAL OVERLAY */
+
+.project-modal-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  background: rgba(3, 5, 10, 0.88);
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+
+/* MODAL CONTENT */
+
+.project-modal-content {
+  position: relative;
+
+  width: min(1000px, 92vw);
+
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  background: #0b0f17;
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.55);
+
+  transform:
+    translateY(30px)
+    scale(0.97);
+
+  transition: transform 0.3s ease;
+
+  z-index: 2;
+}
+
+.project-modal.active .project-modal-content {
+  transform:
+    translateY(0)
+    scale(1);
+}
+
+
+/* MODAL CLOSE */
+
+.modal-close {
+  position: absolute;
+
+  top: 15px;
+  right: 15px;
+
+  z-index: 5;
+
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  border: 1px solid rgba(255, 255, 255, 0.15);
+
+  background: rgba(5, 8, 14, 0.8);
+
+  color: #ffffff;
+
+  font-size: 25px;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.modal-close:hover {
+  background: rgba(124, 140, 255, 0.2);
+
+  border-color: rgba(124, 140, 255, 0.5);
+
+  transform: rotate(90deg);
+}
+
+
+/* MODAL IMAGE */
+
+.modal-image-wrapper {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background: #05070b;
+
+  padding: 25px;
+
+  min-height: 300px;
+}
+
+.modal-image-wrapper img {
+  display: block;
+
+  width: 100%;
+
+  height: auto;
+
+  max-height: 65vh;
+
+  object-fit: contain;
+
+  border-radius: 10px;
+}
+
+
+/* MODAL INFO */
+
+.modal-project-info {
+  padding: 28px 32px 32px;
+}
+
+.modal-project-info span {
+  display: inline-block;
+
+  margin-bottom: 10px;
+
+  color: #7c8cff;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.12em;
+
+  text-transform: uppercase;
+}
+
+.modal-project-info h2 {
+  margin: 0 0 12px;
+
+  color: #ffffff;
+
+  font-size: 28px;
+
+  line-height: 1.2;
+}
+
+.modal-project-info p {
+  margin: 0;
+
+  max-width: 750px;
+
+  color: rgba(255, 255, 255, 0.65);
+
+  font-size: 15px;
+
+  line-height: 1.7;
+}
+
+
+/* =========================================================
+   IMAGE LIGHTBOX
+========================================================= */
+
+.image-lightbox {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 10000;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+
+  background: rgba(4, 6, 10, 0.96);
+
+  overflow: hidden;
+}
+
+
+/* CLOSE BUTTON */
+
+.lightbox-close {
+  position: fixed;
+
+  top: 25px;
+  right: 30px;
+
+  z-index: 10001;
+
+  width: 46px;
+  height: 46px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  border-radius: 6px;
+
+  background: rgba(255, 255, 255, 0.05);
+
+  color: #ffffff;
+
+  font-size: 30px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.lightbox-close:hover {
+  background: #ffffff;
+
+  color: #000000;
+
+  border-color: #ffffff;
+}
+
+
+/* LIGHTBOX CONTENT */
+
+.lightbox-content {
+  width: min(1400px, 95vw);
+
+  height: 92vh;
+
+  display: flex;
+
+  flex-direction: column;
+
+  position: relative;
+}
+
+
+/* LIGHTBOX TOOLBAR */
+
+.lightbox-toolbar {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding-bottom: 15px;
+
+  color: #ffffff;
+
+  font-size: 12px;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+}
+
+
+/* ZOOM CONTROLS */
+
+.zoom-controls {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+}
+
+.zoom-controls button {
+  min-width: 38px;
+  height: 34px;
+
+  padding: 0 10px;
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  background: rgba(255, 255, 255, 0.06);
+
+  color: #ffffff;
+
+  cursor: pointer;
+
+  font-size: 12px;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.zoom-controls button:hover {
+  background: #ffffff;
+
+  color: #000000;
+}
+
+.zoom-controls span {
+  min-width: 50px;
+
+  text-align: center;
+
+  color: rgba(255, 255, 255, 0.7);
+}
+
+
+/* LIGHTBOX IMAGE AREA */
+
+.lightbox-image-wrapper {
+  flex: 1;
+
+  max-width: 100%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  overflow: auto;
+
+  padding: 20px;
+
+  box-sizing: border-box;
+}
+
+
+/* LIGHTBOX IMAGE */
+
+.lightbox-image-wrapper img {
+  display: block;
+
+  width: auto;
+  height: auto;
+
+  max-width: 100%;
+  max-height: 100%;
+
+  object-fit: contain;
+
+  transform-origin: center center;
+
+  transition: transform 0.2s ease;
+
+  cursor: zoom-in;
+
+  user-select: none;
+}
+
+
+/* LIGHTBOX CAPTION */
+
+.lightbox-caption {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding-top: 15px;
+
+  color: #ffffff;
+
+  font-size: 12px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.lightbox-caption strong {
+  font-size: 14px;
+}
+
+.lightbox-caption span {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+
+/* =========================================================
+   RESPONSIVE — NAVBAR + HERO
+========================================================= */
+
+@media (max-width: 1000px) {
+
+  .nav-menu {
+    display: none;
+  }
+
+  .hero-container {
+    grid-template-columns: 1fr;
+
+    padding-top: 100px;
+  }
+
+  .hero-content {
+    max-width: 800px;
+  }
+
+  .hero-visual {
+    height: 500px;
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE — ABOUT
+========================================================= */
+
+@media (max-width: 900px) {
+
+  .about-grid {
+    grid-template-columns: 1fr;
+
+    gap: 60px;
+  }
+
+  .about-footer {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE — EXPERIENCE
+========================================================= */
+
+@media (max-width: 800px) {
+
+  .experience-section {
+    padding: 110px 0 90px;
+  }
+
+  .experience-timeline {
+    padding-left: 65px;
+  }
+
+  .experience-timeline::before {
+    left: 17px;
+  }
+
+  .experience-marker {
+    left: -65px;
+
+    width: 35px;
+    height: 35px;
+  }
+
+  .experience-marker span {
+    font-size: 8px;
+  }
+
+  .experience-item {
+    padding-bottom: 65px;
+  }
+
+  .experience-item.featured .experience-content {
+    padding: 22px;
+  }
+
+  .experience-content h3 {
+    font-size: 30px;
+  }
+
+  .experience-meta {
+    flex-direction: column;
+
+    gap: 7px;
+  }
+
+  .experience-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE — AWARDS TABLET
+========================================================= */
 
 @media (max-width: 1000px) {
 
@@ -2046,14 +2562,162 @@
   .award-detail-info h3 {
     font-size: 26px;
   }
+
+  .evidence-image {
+    min-height: 220px;
+
+    max-height: 450px;
+  }
+
+  .evidence-image img {
+    max-height: 450px;
+  }
 }
 
 
-/* ========================================
-   AWARDS RESPONSIVE — MOBILE
-======================================== */
+/* =========================================================
+   RESPONSIVE — MOBILE 760px
+========================================================= */
 
 @media (max-width: 760px) {
+
+  /* HERO */
+
+  .hero-container {
+    padding: 70px 22px;
+  }
+
+  .hero h1 {
+    font-size: 52px;
+
+    letter-spacing: -3px;
+  }
+
+  .hero-description {
+    font-size: 15px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .hero-stats {
+    gap: 25px;
+  }
+
+  .hero-visual {
+    height: 430px;
+  }
+
+  .engineer-card {
+    width: 290px;
+    height: 390px;
+  }
+
+  .visual-grid {
+    width: 350px;
+    height: 350px;
+  }
+
+  .floating-tag {
+    font-size: 9px;
+  }
+
+  .tag-one {
+    left: 0;
+  }
+
+  .tag-two {
+    right: 0;
+  }
+
+  .tag-three {
+    left: 0;
+  }
+
+
+  /* ABOUT */
+
+  .about-section {
+    padding: 100px 0 80px;
+  }
+
+  .section-container {
+    padding: 0 22px;
+  }
+
+  .section-heading {
+    gap: 16px;
+
+    margin-bottom: 55px;
+  }
+
+  .section-heading h2 {
+    font-size: 42px;
+
+    letter-spacing: -2px;
+  }
+
+  .about-lead {
+    font-size: 20px;
+  }
+
+
+  /* EXPERIENCE */
+
+  .experience-intro {
+    margin:
+      -25px
+      0
+      60px
+      0;
+  }
+
+  .experience-intro p {
+    font-size: 14px;
+  }
+
+  .experience-timeline {
+    padding-left: 45px;
+  }
+
+  .experience-timeline::before {
+    left: 12px;
+  }
+
+  .experience-marker {
+    left: -45px;
+
+    width: 27px;
+    height: 27px;
+  }
+
+  .experience-marker span {
+    font-size: 7px;
+  }
+
+  .experience-content h3 {
+    font-size: 25px;
+
+    letter-spacing: -1px;
+  }
+
+  .experience-content h4 {
+    font-size: 13px;
+  }
+
+  .experience-description {
+    font-size: 13px;
+  }
+
+  .experience-summary {
+    grid-template-columns: 1fr;
+  }
+
+
+  /* AWARDS */
 
   .awards-section {
     padding: 110px 0 90px;
@@ -2092,7 +2756,7 @@
   }
 
 
-  /* STACK AWARDS */
+  /* AWARDS STACK */
 
   .awards-interactive {
     display: flex;
@@ -2147,33 +2811,26 @@
   }
 
 
-  /*
-     MOBILE IMAGE
-
-     Tidak ada height.
-     Tidak ada max-height.
-     Tidak ada object-fit: cover.
-
-     Foto mengikuti ukuran asli.
-  */
+  /* EVIDENCE IMAGE */
 
   .evidence-image {
     width: 100%;
-
-    display: block;
-
-    height: auto;
 
     min-height: 0;
 
     max-height: none;
 
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
     overflow: hidden;
+
+    background: #05070b;
   }
 
   .evidence-image img {
-    display: block;
-
     width: 100%;
 
     height: auto;
@@ -2182,12 +2839,15 @@
 
     max-height: none;
 
+    display: block;
+
     object-fit: contain;
   }
 
 
-  /* HINT MOBILE */
+  /* HIDE HOVER OVERLAY ON TOUCH */
 
+  .image-view-overlay,
   .image-click-hint {
     display: none;
   }
@@ -2206,7 +2866,7 @@
   }
 
 
-  /* FOOTER */
+  /* LEADERSHIP */
 
   .awards-footer {
     display: block;
@@ -2218,17 +2878,142 @@
     margin-bottom: 20px;
   }
 
-  .awards-footer-content {
+  .leadership-content {
+    gap: 25px;
+  }
+
+  .leadership-certificate-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  /* PROJECT MODAL */
+
+  .project-modal {
+    padding: 15px;
+  }
+
+  .project-modal-content {
+    width: 100%;
+
+    max-height: 92vh;
+
+    border-radius: 14px;
+  }
+
+  .modal-image-wrapper {
+    padding: 15px;
+
+    min-height: 220px;
+  }
+
+  .modal-image-wrapper img {
+    width: auto;
+
+    max-width: 100%;
+
+    max-height: 55vh;
+
+    object-fit: contain;
+  }
+
+  .modal-project-info {
+    padding: 22px;
+  }
+
+  .modal-project-info h2 {
+    font-size: 22px;
+  }
+
+  .modal-project-info p {
+    font-size: 14px;
+  }
+
+  .modal-close {
+    width: 36px;
+    height: 36px;
+
+    top: 10px;
+    right: 10px;
+
+    font-size: 22px;
+  }
+
+
+  /* LIGHTBOX */
+
+  .image-lightbox {
+    padding: 15px;
+  }
+
+  .lightbox-content {
+    width: 100%;
+
+    height: 94vh;
+  }
+
+  .lightbox-toolbar {
     flex-direction: column;
 
-    gap: 20px;
+    align-items: center;
+
+    gap: 10px;
+  }
+
+  .lightbox-image-wrapper {
+    padding: 10px;
+  }
+
+  .lightbox-image-wrapper img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .lightbox-close {
+    top: 12px;
+    right: 15px;
+
+    width: 40px;
+    height: 40px;
+
+    font-size: 25px;
+  }
+
+  .lightbox-caption {
+    flex-direction: column;
+
+    align-items: center;
+
+    text-align: center;
+
+    gap: 7px;
   }
 }
 
 
-/* ========================================
-   VERY SMALL MOBILE
-======================================== */
+/* =========================================================
+   RESPONSIVE — MOBILE 600px
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .nav-container {
+    padding: 0 22px;
+  }
+
+  .section-container {
+    padding: 0 22px;
+  }
+
+  .leadership-certificate-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE — VERY SMALL MOBILE 420px
+========================================================= */
 
 @media (max-width: 420px) {
 
@@ -2275,11 +3060,9 @@
   }
 
   .evidence-image {
-    width: 100%;
+    min-height: 0;
 
     height: auto;
-
-    min-height: 0;
 
     max-height: none;
   }
@@ -2289,630 +3072,20 @@
 
     height: auto;
 
-    max-width: 100%;
-
     max-height: none;
 
     object-fit: contain;
   }
-}
 
-
-/* =========================================
-   PROJECT DETAIL BUTTON
-========================================= */
-
-.view-details-btn {
-  margin-top: 20px;
-
-  display: inline-flex;
-
-  align-items: center;
-
-  gap: 8px;
-
-  padding: 10px 18px;
-
-  background: transparent;
-
-  color: #ffffff;
-
-  border: 1px solid rgba(255, 255, 255, 0.18);
-
-  border-radius: 8px;
-
-  font-family: inherit;
-
-  font-size: 13px;
-
-  font-weight: 500;
-
-  cursor: pointer;
-
-  transition: all 0.3s ease;
-}
-
-.view-details-btn span {
-  font-size: 16px;
-
-  transition: transform 0.3s ease;
-}
-
-.view-details-btn:hover {
-  background: rgba(124, 140, 255, 0.12);
-
-  border-color: rgba(124, 140, 255, 0.5);
-
-  transform: translateY(-2px);
-}
-
-.view-details-btn:hover span {
-  transform: translate(3px, -3px);
-}
-
-
-/* =========================================
-   PROJECT MODAL
-========================================= */
-
-.project-modal {
-  position: fixed;
-
-  inset: 0;
-
-  z-index: 9999;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  padding: 30px;
-
-  opacity: 0;
-
-  visibility: hidden;
-
-  transition:
-    opacity 0.3s ease,
-    visibility 0.3s ease;
-}
-
-.project-modal.active {
-  opacity: 1;
-
-  visibility: visible;
-}
-
-
-/* BACKGROUND */
-
-.project-modal-overlay {
-  position: absolute;
-
-  inset: 0;
-
-  background: rgba(3, 5, 10, 0.88);
-
-  backdrop-filter: blur(12px);
-}
-
-
-/* MODAL BOX */
-
-.project-modal-content {
-  position: relative;
-
-  width: min(1000px, 92vw);
-
-  max-height: 90vh;
-
-  overflow-y: auto;
-
-  background: #0b0f17;
-
-  border: 1px solid rgba(255, 255, 255, 0.1);
-
-  border-radius: 18px;
-
-  box-shadow:
-    0 30px 80px rgba(0, 0, 0, 0.55);
-
-  transform:
-    translateY(30px)
-    scale(0.97);
-
-  transition: transform 0.3s ease;
-
-  z-index: 2;
-}
-
-.project-modal.active .project-modal-content {
-  transform:
-    translateY(0)
-    scale(1);
-}
-
-
-/* CLOSE */
-
-.modal-close {
-  position: absolute;
-
-  top: 15px;
-  right: 15px;
-
-  z-index: 5;
-
-  width: 40px;
-  height: 40px;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 50%;
-
-  border: 1px solid rgba(255, 255, 255, 0.15);
-
-  background: rgba(5, 8, 14, 0.8);
-
-  color: #ffffff;
-
-  font-size: 25px;
-
-  line-height: 1;
-
-  cursor: pointer;
-
-  transition: all 0.3s ease;
-}
-
-.modal-close:hover {
-  background: rgba(124, 140, 255, 0.2);
-
-  border-color: rgba(124, 140, 255, 0.5);
-
-  transform: rotate(90deg);
-}
-
-
-/* =========================================
-   MODAL IMAGE
-========================================= */
-
-.modal-image-wrapper {
-  width: 100%;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  background: #05070b;
-
-  padding: 25px;
-
-  min-height: 300px;
-}
-
-.modal-image-wrapper img {
-  display: block;
-
-  width: 100%;
-
-  height: auto;
-
-  max-width: 100%;
-
-  max-height: 65vh;
-
-  object-fit: contain;
-
-  border-radius: 10px;
-}
-
-
-/* =========================================
-   MODAL INFORMATION
-========================================= */
-
-.modal-project-info {
-  padding: 28px 32px 32px;
-}
-
-.modal-project-info span {
-  display: inline-block;
-
-  margin-bottom: 10px;
-
-  color: #7c8cff;
-
-  font-size: 12px;
-
-  font-weight: 600;
-
-  letter-spacing: 0.12em;
-
-  text-transform: uppercase;
-}
-
-.modal-project-info h2 {
-  margin: 0 0 12px;
-
-  color: #ffffff;
-
-  font-size: 28px;
-
-  line-height: 1.2;
-}
-
-.modal-project-info p {
-  margin: 0;
-
-  max-width: 750px;
-
-  color: rgba(255, 255, 255, 0.65);
-
-  font-size: 15px;
-
-  line-height: 1.7;
-}
-
-
-/* =========================================
-   PROJECT MODAL MOBILE
-========================================= */
-
-@media (max-width: 600px) {
-
-  .project-modal {
-    padding: 15px;
+  .hero h1 {
+    font-size: 46px;
   }
 
-  .project-modal-content {
-    width: 100%;
-
-    max-height: 92vh;
-
-    border-radius: 14px;
+  .hero-stats {
+    flex-wrap: wrap;
   }
 
-  .modal-image-wrapper {
-    padding: 15px;
-
-    min-height: 220px;
-  }
-
-  .modal-image-wrapper img {
-    width: 100%;
-
-    height: auto;
-
-    max-width: 100%;
-
-    max-height: 55vh;
-
-    object-fit: contain;
-  }
-
-  .modal-project-info {
-    padding: 22px;
-  }
-
-  .modal-project-info h2 {
-    font-size: 22px;
-  }
-
-  .modal-project-info p {
-    font-size: 14px;
-  }
-
-  .modal-close {
-    width: 36px;
-    height: 36px;
-
-    top: 10px;
-    right: 10px;
-
-    font-size: 22px;
-  }
-}
-
-
-/* =========================================
-   IMAGE LIGHTBOX
-========================================= */
-
-.image-lightbox {
-  position: fixed;
-
-  inset: 0;
-
-  z-index: 9999;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  background: rgba(0, 0, 0, 0.94);
-
-  padding: 30px;
-
-  box-sizing: border-box;
-}
-
-
-/* =========================================
-   LIGHTBOX CLOSE
-========================================= */
-
-.lightbox-close {
-  position: fixed;
-
-  top: 20px;
-  right: 25px;
-
-  z-index: 10001;
-
-  width: 46px;
-  height: 46px;
-
-  border: 1px solid rgba(255, 255, 255, 0.25);
-
-  background: rgba(255, 255, 255, 0.08);
-
-  color: #ffffff;
-
-  font-size: 30px;
-
-  line-height: 1;
-
-  cursor: pointer;
-
-  transition: all 0.2s ease;
-}
-
-.lightbox-close:hover {
-  background: rgba(255, 255, 255, 0.15);
-}
-
-
-/* =========================================
-   LIGHTBOX CONTENT
-========================================= */
-
-.lightbox-content {
-  width: min(1400px, 95vw);
-
-  height: 92vh;
-
-  display: flex;
-
-  flex-direction: column;
-
-  position: relative;
-}
-
-
-/* =========================================
-   LIGHTBOX TOOLBAR
-========================================= */
-
-.lightbox-toolbar {
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  gap: 20px;
-
-  padding-bottom: 15px;
-
-  color: #ffffff;
-
-  font-size: 12px;
-
-  letter-spacing: 0.08em;
-
-  text-transform: uppercase;
-}
-
-.zoom-controls {
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 8px;
-}
-
-.zoom-controls button {
-  min-width: 38px;
-
-  height: 34px;
-
-  padding: 0 10px;
-
-  border: 1px solid rgba(255, 255, 255, 0.2);
-
-  background: rgba(255, 255, 255, 0.06);
-
-  color: #ffffff;
-
-  cursor: pointer;
-
-  font-size: 12px;
-
-  transition: background 0.2s ease;
-}
-
-.zoom-controls button:hover {
-  background: rgba(255, 255, 255, 0.15);
-}
-
-.zoom-controls span {
-  min-width: 50px;
-
-  text-align: center;
-
-  color: rgba(255, 255, 255, 0.7);
-}
-
-
-/* =========================================
-   LIGHTBOX IMAGE AREA
-========================================= */
-
-.lightbox-image-wrapper {
-  flex: 1;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  overflow: auto;
-
-  padding: 20px;
-
-  box-sizing: border-box;
-}
-
-
-/* =========================================
-   LIGHTBOX FULL IMAGE
-========================================= */
-
-.lightbox-image-wrapper img {
-  display: block;
-
-  width: auto;
-
-  height: auto;
-
-  max-width: 100%;
-
-  max-height: 100%;
-
-  object-fit: contain;
-
-  transform-origin: center center;
-
-  transition: transform 0.2s ease;
-
-  cursor: zoom-in;
-
-  user-select: none;
-}
-
-
-/* =========================================
-   LIGHTBOX CAPTION
-========================================= */
-
-.lightbox-caption {
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  gap: 20px;
-
-  padding-top: 15px;
-
-  color: #ffffff;
-
-  font-size: 12px;
-
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.lightbox-caption strong {
-  font-size: 14px;
-}
-
-.lightbox-caption span {
-  color: rgba(255, 255, 255, 0.55);
-}
-
-
-/* =========================================
-   LIGHTBOX MOBILE
-========================================= */
-
-@media (max-width: 600px) {
-
-  .image-lightbox {
-    padding: 15px;
-  }
-
-  .lightbox-content {
-    width: 100%;
-
-    height: 94vh;
-  }
-
-  .lightbox-toolbar {
-    flex-direction: column;
-
-    align-items: center;
-
-    gap: 10px;
-
-    padding-bottom: 10px;
-  }
-
-  .lightbox-image-wrapper {
-    padding: 10px;
-
-    overflow: auto;
-  }
-
-  .lightbox-image-wrapper img {
-    max-width: 100%;
-
-    max-height: 100%;
-
-    width: auto;
-
-    height: auto;
-  }
-
-  .lightbox-caption {
-    flex-direction: column;
-
-    align-items: center;
-
-    text-align: center;
-
-    gap: 5px;
-
-    padding-top: 12px;
-  }
-
-  .lightbox-close {
-    top: 12px;
-
-    right: 15px;
-
-    width: 40px;
-
-    height: 40px;
-
-    font-size: 25px;
-  }
-
-  .zoom-controls button {
-    min-width: 34px;
-
-    height: 32px;
-
-    padding: 0 8px;
+  .stat strong {
+    font-size: 23px;
   }
 }
