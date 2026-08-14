@@ -1311,7 +1311,7 @@
 
 
 /* ========================================
-   AWARDS — INTERACTIVE ACHIEVEMENTS
+   AWARDS SECTION
 ======================================== */
 
 .awards-section {
@@ -1330,7 +1330,7 @@
 
 
 /* ========================================
-   AWARDS HEADER
+   AWARDS CONTAINER
 ======================================== */
 
 .awards-container {
@@ -1338,6 +1338,11 @@
 
   margin: 0 auto;
 }
+
+
+/* ========================================
+   AWARDS HEADER
+======================================== */
 
 .awards-header {
   display: grid;
@@ -1411,7 +1416,7 @@
 
 
 /* ========================================
-   INTERACTIVE AREA
+   AWARDS INTERACTIVE
 ======================================== */
 
 .awards-interactive {
@@ -1768,6 +1773,7 @@
 
 /* ========================================
    VISUAL EVIDENCE
+   FOTO TIDAK DI-CROP
 ======================================== */
 
 .award-evidence {
@@ -1796,9 +1802,12 @@
 
 
 /*
-   IMPORTANT:
-   IMAGE TIDAK DIPAKSA MEMENUHI HEIGHT.
-   Ini mencegah foto portrait / landscape ter-crop.
+   IMPORTANT
+
+   Foto portrait dan landscape:
+   - tidak menggunakan fixed height
+   - tidak menggunakan object-fit: cover
+   - mengikuti aspect ratio asli
 */
 
 .evidence-image {
@@ -1806,14 +1815,7 @@
 
   width: 100%;
 
-  min-height: 235px;
-
-  max-height: 520px;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
+  display: block;
 
   overflow: hidden;
 
@@ -1829,25 +1831,27 @@
   height: auto;
 
   max-width: 100%;
-  max-height: 520px;
 
   object-fit: contain;
-
-  object-position: center;
-
-  transition: transform 0.5s ease;
 }
 
+
+/* IMAGE HOVER */
+
 .evidence-image:hover img {
-  transform: scale(1.03);
+  transform: scale(1.015);
+}
+
+.evidence-image img {
+  transition: transform 0.35s ease;
 }
 
 
 /* ========================================
-   IMAGE VIEW OVERLAY
+   IMAGE CLICK HINT
 ======================================== */
 
-.image-view-overlay {
+.image-click-hint {
   position: absolute;
 
   inset: 0;
@@ -1859,33 +1863,25 @@
 
   gap: 10px;
 
-  background: rgba(5, 8, 14, 0.55);
+  background: rgba(0, 0, 0, 0.45);
 
-  opacity: 0;
-
-  transition: opacity 0.3s ease;
-
-  pointer-events: none;
-}
-
-.evidence-image:hover .image-view-overlay {
-  opacity: 1;
-}
-
-.image-view-overlay span:first-child {
   color: #ffffff;
 
   font-size: 12px;
 
   font-weight: 600;
 
-  letter-spacing: 0.15em;
+  letter-spacing: 0.12em;
+
+  opacity: 0;
+
+  transition: opacity 0.25s ease;
+
+  pointer-events: none;
 }
 
-.view-icon {
-  color: #ffffff;
-
-  font-size: 18px;
+.evidence-image:hover .image-click-hint {
+  opacity: 1;
 }
 
 
@@ -1949,7 +1945,7 @@
 
 
 /* ========================================
-   LEADERSHIP
+   LEADERSHIP / AWARDS FOOTER
 ======================================== */
 
 .awards-footer {
@@ -2049,16 +2045,6 @@
 
   .award-detail-info h3 {
     font-size: 26px;
-  }
-
-  .evidence-image {
-    min-height: 220px;
-
-    max-height: 450px;
-  }
-
-  .evidence-image img {
-    max-height: 450px;
   }
 }
 
@@ -2163,32 +2149,31 @@
 
   /*
      MOBILE IMAGE
-     
-     Tinggi TIDAK DIKUNCI.
-     Width mengikuti container.
-     Height otomatis.
-     Jadi foto portrait maupun landscape
-     tetap tampil utuh.
+
+     Tidak ada height.
+     Tidak ada max-height.
+     Tidak ada object-fit: cover.
+
+     Foto mengikuti ukuran asli.
   */
 
   .evidence-image {
     width: 100%;
 
+    display: block;
+
+    height: auto;
+
     min-height: 0;
 
     max-height: none;
 
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
     overflow: hidden;
-
-    background: #05070b;
   }
 
   .evidence-image img {
+    display: block;
+
     width: 100%;
 
     height: auto;
@@ -2197,15 +2182,13 @@
 
     max-height: none;
 
-    display: block;
-
     object-fit: contain;
   }
 
 
-  /* OVERLAY MOBILE */
+  /* HINT MOBILE */
 
-  .image-view-overlay {
+  .image-click-hint {
     display: none;
   }
 
@@ -2291,15 +2274,12 @@
     font-size: 20px;
   }
 
-  /*
-     Jangan gunakan height: 180px lagi.
-     Foto dibiarkan mengikuti aspect ratio aslinya.
-  */
-
   .evidence-image {
-    min-height: 0;
+    width: 100%;
 
     height: auto;
+
+    min-height: 0;
 
     max-height: none;
   }
@@ -2308,6 +2288,8 @@
     width: 100%;
 
     height: auto;
+
+    max-width: 100%;
 
     max-height: none;
 
@@ -2522,6 +2504,8 @@
 
   height: auto;
 
+  max-width: 100%;
+
   max-height: 65vh;
 
   object-fit: contain;
@@ -2602,7 +2586,9 @@
   }
 
   .modal-image-wrapper img {
-    width: auto;
+    width: 100%;
+
+    height: auto;
 
     max-width: 100%;
 
@@ -2641,238 +2627,17 @@
 
 .image-lightbox {
   position: fixed;
+
   inset: 0;
+
   z-index: 9999;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
-
-  padding: 40px;
 
   background: rgba(0, 0, 0, 0.94);
-
-  overflow: hidden;
-}
-
-.lightbox-content {
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  overflow: hidden;
-}
-
-.lightbox-image-wrapper {
-  max-width: 90vw;
-  max-height: 78vh;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  overflow: auto;
-}
-
-.lightbox-image-wrapper img {
-  display: block;
-
-  width: auto;
-  height: auto;
-
-  max-width: 90vw;
-  max-height: 78vh;
-
-  object-fit: contain;
-
-  transform-origin: center center;
-
-  transition: transform 0.25s ease;
-
-  cursor: zoom-in;
-}
-
-.lightbox-label {
-  width: 90vw;
-
-  display: flex;
-  justify-content: space-between;
-
-  margin-bottom: 15px;
-
-  color: rgba(255, 255, 255, 0.55);
-
-  font-size: 11px;
-  letter-spacing: 2px;
-}
-
-.lightbox-caption {
-  margin-top: 18px;
-
-  text-align: center;
-
-  color: white;
-}
-
-.lightbox-caption h3 {
-  margin: 0;
-
-  font-size: 18px;
-}
-
-.lightbox-caption p {
-  margin-top: 6px;
-
-  color: rgba(255, 255, 255, 0.5);
-
-  font-size: 12px;
-}
-
-.lightbox-close {
-  position: absolute;
-
-  top: 25px;
-  right: 30px;
-
-  z-index: 10;
-
-  width: 45px;
-  height: 45px;
-
-  border: 1px solid rgba(255, 255, 255, 0.2);
-
-  background: rgba(255, 255, 255, 0.05);
-
-  color: white;
-
-  font-size: 28px;
-
-  cursor: pointer;
-
-  transition: 0.2s ease;
-}
-
-.lightbox-close:hover {
-  background: white;
-  color: black;
-}
-
-.lightbox-controls {
-  position: absolute;
-
-  top: 25px;
-  left: 50%;
-
-  transform: translateX(-50%);
-
-  z-index: 20;
-
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  padding: 7px;
-
-  border: 1px solid rgba(255, 255, 255, 0.15);
-
-  background: rgba(10, 10, 10, 0.8);
-
-  backdrop-filter: blur(10px);
-}
-
-.lightbox-controls button {
-  min-width: 38px;
-  height: 32px;
-
-  padding: 0 10px;
-
-  border: 1px solid rgba(255, 255, 255, 0.15);
-
-  background: transparent;
-
-  color: white;
-
-  font-size: 14px;
-
-  cursor: pointer;
-}
-
-.lightbox-controls button:hover {
-  background: white;
-  color: black;
-}
-
-.lightbox-controls span {
-  min-width: 55px;
-
-  text-align: center;
-
-  color: rgba(255, 255, 255, 0.7);
-
-  font-size: 11px;
-  letter-spacing: 1px;
-}
-/* =========================================
-   AWARD IMAGE CLICK
-========================================= */
-
-.evidence-image {
-  position: relative;
-  cursor: zoom-in;
-  overflow: hidden;
-}
-
-.evidence-image img {
-  display: block;
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-}
-
-.image-click-hint {
-  position: absolute;
-  inset: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-
-  background: rgba(0, 0, 0, 0.45);
-
-  color: #ffffff;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-
-  opacity: 0;
-  transition: opacity 0.25s ease;
-}
-
-.evidence-image:hover .image-click-hint {
-  opacity: 1;
-}
-
-
-/* =========================================
-   IMAGE LIGHTBOX
-========================================= */
-
-.image-lightbox {
-  position: fixed;
-  inset: 0;
-
-  z-index: 9999;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background: rgba(4, 6, 10, 0.96);
 
   padding: 30px;
 
@@ -2880,57 +2645,67 @@
 }
 
 
-/* CLOSE BUTTON */
+/* =========================================
+   LIGHTBOX CLOSE
+========================================= */
 
 .lightbox-close {
   position: fixed;
 
-  top: 25px;
-  right: 30px;
+  top: 20px;
+  right: 25px;
+
+  z-index: 10001;
 
   width: 46px;
   height: 46px;
 
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.25);
 
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.08);
 
   color: #ffffff;
 
   font-size: 30px;
+
   line-height: 1;
 
   cursor: pointer;
-
-  z-index: 10001;
 
   transition: all 0.2s ease;
 }
 
 .lightbox-close:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 
-/* LIGHTBOX CONTENT */
+/* =========================================
+   LIGHTBOX CONTENT
+========================================= */
 
 .lightbox-content {
   width: min(1400px, 95vw);
+
   height: 92vh;
 
   display: flex;
+
   flex-direction: column;
 
   position: relative;
 }
 
 
-/* TOOLBAR */
+/* =========================================
+   LIGHTBOX TOOLBAR
+========================================= */
 
 .lightbox-toolbar {
   display: flex;
 
   align-items: center;
+
   justify-content: space-between;
 
   gap: 20px;
@@ -2951,11 +2726,14 @@
 
   align-items: center;
 
+  justify-content: center;
+
   gap: 8px;
 }
 
 .zoom-controls button {
   min-width: 38px;
+
   height: 34px;
 
   padding: 0 10px;
@@ -2969,6 +2747,8 @@
   cursor: pointer;
 
   font-size: 12px;
+
+  transition: background 0.2s ease;
 }
 
 .zoom-controls button:hover {
@@ -2984,7 +2764,9 @@
 }
 
 
-/* IMAGE AREA */
+/* =========================================
+   LIGHTBOX IMAGE AREA
+========================================= */
 
 .lightbox-image-wrapper {
   flex: 1;
@@ -3002,14 +2784,20 @@
 }
 
 
-/* FULL IMAGE */
+/* =========================================
+   LIGHTBOX FULL IMAGE
+========================================= */
 
 .lightbox-image-wrapper img {
-  max-width: 100%;
-  max-height: 100%;
+  display: block;
 
   width: auto;
+
   height: auto;
+
+  max-width: 100%;
+
+  max-height: 100%;
 
   object-fit: contain;
 
@@ -3023,12 +2811,15 @@
 }
 
 
-/* CAPTION */
+/* =========================================
+   LIGHTBOX CAPTION
+========================================= */
 
 .lightbox-caption {
   display: flex;
 
   align-items: center;
+
   justify-content: space-between;
 
   gap: 20px;
@@ -3049,112 +2840,79 @@
 .lightbox-caption span {
   color: rgba(255, 255, 255, 0.55);
 }
-/* ================================
-   AWARD IMAGE
-================================ */
-
-.evidence-image {
-  position: relative;
-  cursor: zoom-in;
-}
-
-.evidence-image img {
-  display: block;
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-}
 
 
-/* ================================
-   LIGHTBOX
-================================ */
+/* =========================================
+   LIGHTBOX MOBILE
+========================================= */
 
-.image-lightbox {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
+@media (max-width: 600px) {
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  .image-lightbox {
+    padding: 15px;
+  }
 
-  background: rgba(0, 0, 0, 0.94);
-}
+  .lightbox-content {
+    width: 100%;
 
-.lightbox-close {
-  position: fixed;
-  top: 20px;
-  right: 25px;
+    height: 94vh;
+  }
 
-  z-index: 10000;
+  .lightbox-toolbar {
+    flex-direction: column;
 
-  width: 45px;
-  height: 45px;
+    align-items: center;
 
-  border: 1px solid rgba(255,255,255,0.3);
-  background: rgba(255,255,255,0.08);
+    gap: 10px;
 
-  color: white;
-  font-size: 30px;
+    padding-bottom: 10px;
+  }
 
-  cursor: pointer;
-}
+  .lightbox-image-wrapper {
+    padding: 10px;
 
-.lightbox-content {
-  width: 90vw;
-  height: 90vh;
+    overflow: auto;
+  }
 
-  display: flex;
-  flex-direction: column;
-}
+  .lightbox-image-wrapper img {
+    max-width: 100%;
 
-.zoom-controls {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
+    max-height: 100%;
 
-  margin-bottom: 15px;
-}
+    width: auto;
 
-.zoom-controls button {
-  padding: 8px 14px;
+    height: auto;
+  }
 
-  border: 1px solid rgba(255,255,255,0.25);
-  background: rgba(255,255,255,0.08);
+  .lightbox-caption {
+    flex-direction: column;
 
-  color: white;
+    align-items: center;
 
-  cursor: pointer;
-}
+    text-align: center;
 
-.zoom-controls span {
-  color: white;
-  min-width: 50px;
-  text-align: center;
-}
+    gap: 5px;
 
-.lightbox-image-wrapper {
-  flex: 1;
+    padding-top: 12px;
+  }
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  .lightbox-close {
+    top: 12px;
 
-  overflow: auto;
-}
+    right: 15px;
 
-.lightbox-image-wrapper img {
-  max-width: 100%;
-  max-height: 100%;
+    width: 40px;
 
-  width: auto;
-  height: auto;
+    height: 40px;
 
-  object-fit: contain;
+    font-size: 25px;
+  }
 
-  transform-origin: center center;
+  .zoom-controls button {
+    min-width: 34px;
 
-  transition: transform 0.2s ease;
+    height: 32px;
+
+    padding: 0 8px;
+  }
 }
