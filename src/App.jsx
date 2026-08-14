@@ -1142,64 +1142,95 @@ const awards = [
             IMAGE LIGHTBOX
         ========================= */}
         {isImageOpen && (
+  <div
+    className="image-lightbox"
+    onClick={() => setIsImageOpen(false)}
+  >
 
-          <div
-            className="image-lightbox"
-            onClick={() => setIsImageOpen(false)}
-          >
+    <button
+      className="lightbox-close"
+      onClick={() => setIsImageOpen(false)}
+    >
+      ×
+    </button>
 
-            <button
-              className="lightbox-close"
-              onClick={() => setIsImageOpen(false)}
-            >
-              ×
-            </button>
+    <div
+      className="lightbox-controls"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <button
+        onClick={() =>
+          setImageZoom((prev) => Math.min(prev + 0.25, 3))
+        }
+      >
+        +
+      </button>
 
+      <span>
+        {Math.round(imageZoom * 100)}%
+      </span>
 
-            <div
-              className="lightbox-content"
-              onClick={(e) => e.stopPropagation()}
-            >
+      <button
+        onClick={() =>
+          setImageZoom((prev) => Math.max(prev - 0.25, 0.5))
+        }
+      >
+        −
+      </button>
 
-              <div className="lightbox-label">
+      <button
+        onClick={() => setImageZoom(1)}
+      >
+        RESET
+      </button>
+    </div>
 
-                <span>
-                  {selectedAward.type}
-                </span>
+    <div
+      className="lightbox-content"
+      onClick={(e) => e.stopPropagation()}
+    >
 
-                <span>
-                  {selectedAward.year}
-                </span>
+      <div className="lightbox-label">
+        <span>
+          {selectedAward.type}
+        </span>
 
-              </div>
+        <span>
+          {selectedAward.year}
+        </span>
+      </div>
 
+      <div className="lightbox-image-wrapper">
 
-              <img
-                src={selectedAward.image}
-                alt={`${selectedAward.title} achievement`}
-              />
+        <img
+          src={selectedAward.image}
+          alt={`${selectedAward.title} achievement`}
+          style={{
+            transform: `scale(${imageZoom})`,
+          }}
+        />
 
+      </div>
 
-              <div className="lightbox-caption">
+      <div className="lightbox-caption">
 
-                <h3>
-                  {selectedAward.title}
-                </h3>
+        <h3>
+          {selectedAward.title}
+        </h3>
 
-                <p>
-                  {selectedAward.location}
+        <p>
+          {selectedAward.location}
 
-                  {selectedAward.country &&
-                    ` · ${selectedAward.country}`}
-                </p>
+          {selectedAward.country &&
+            ` · ${selectedAward.country}`}
+        </p>
 
-              </div>
+      </div>
 
-            </div>
+    </div>
 
-          </div>
-
-        )}
+  </div>
+)}
 
 
         {/* =========================

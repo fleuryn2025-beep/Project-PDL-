@@ -2641,74 +2641,65 @@
 
 .image-lightbox {
   position: fixed;
-
   inset: 0;
-
   z-index: 9999;
 
   display: flex;
-
   align-items: center;
   justify-content: center;
 
-  padding: 30px;
+  padding: 40px;
 
-  background: rgba(3, 5, 10, 0.94);
+  background: rgba(0, 0, 0, 0.94);
 
-  backdrop-filter: blur(14px);
-
-  animation: lightboxFadeIn 0.25s ease;
+  overflow: hidden;
 }
-
-
-/* CONTENT */
 
 .lightbox-content {
-  position: relative;
-
-  width: min(1100px, 94vw);
-
-  max-height: 92vh;
+  width: 100%;
+  height: 100%;
 
   display: flex;
-
   flex-direction: column;
-
   align-items: center;
+  justify-content: center;
 
-  animation: lightboxScaleIn 0.3s ease;
+  overflow: hidden;
 }
 
-
-/* IMAGE */
-
-.lightbox-content img {
-  display: block;
-
-  max-width: 100%;
-
+.lightbox-image-wrapper {
+  max-width: 90vw;
   max-height: 78vh;
 
-  width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
+  overflow: auto;
+}
+
+.lightbox-image-wrapper img {
+  display: block;
+
+  width: auto;
   height: auto;
+
+  max-width: 90vw;
+  max-height: 78vh;
 
   object-fit: contain;
 
-  border-radius: 10px;
+  transform-origin: center center;
 
-  box-shadow:
-    0 30px 80px rgba(0, 0, 0, 0.6);
+  transition: transform 0.25s ease;
+
+  cursor: zoom-in;
 }
 
-
-/* TOP LABEL */
-
 .lightbox-label {
-  width: 100%;
+  width: 90vw;
 
   display: flex;
-
   justify-content: space-between;
 
   margin-bottom: 15px;
@@ -2716,160 +2707,112 @@
   color: rgba(255, 255, 255, 0.55);
 
   font-size: 11px;
-
-  font-weight: 600;
-
-  letter-spacing: 0.12em;
+  letter-spacing: 2px;
 }
 
-
-/* CAPTION */
-
 .lightbox-caption {
-  width: 100%;
-
   margin-top: 18px;
 
-  text-align: left;
+  text-align: center;
+
+  color: white;
 }
 
 .lightbox-caption h3 {
-  margin: 0 0 6px;
+  margin: 0;
 
-  color: #ffffff;
-
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .lightbox-caption p {
-  margin: 0;
+  margin-top: 6px;
 
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(255, 255, 255, 0.5);
 
-  font-size: 13px;
+  font-size: 12px;
 }
 
-
-/* CLOSE */
-
 .lightbox-close {
-  position: fixed;
+  position: absolute;
 
   top: 25px;
   right: 30px;
 
-  z-index: 10000;
+  z-index: 10;
 
   width: 45px;
   height: 45px;
 
-  display: flex;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 
-  align-items: center;
-  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
 
-  border: 1px solid rgba(255, 255, 255, 0.15);
-
-  border-radius: 50%;
-
-  background: rgba(10, 13, 20, 0.8);
-
-  color: #ffffff;
+  color: white;
 
   font-size: 28px;
 
-  font-weight: 300;
-
   cursor: pointer;
 
-  transition: all 0.3s ease;
+  transition: 0.2s ease;
 }
 
 .lightbox-close:hover {
-  background: rgba(255, 255, 255, 0.1);
-
-  border-color: rgba(255, 255, 255, 0.35);
-
-  transform: rotate(90deg);
+  background: white;
+  color: black;
 }
 
+.lightbox-controls {
+  position: absolute;
 
-/* =========================================
-   LIGHTBOX ANIMATION
-========================================= */
+  top: 25px;
+  left: 50%;
 
-@keyframes lightboxFadeIn {
+  transform: translateX(-50%);
 
-  from {
-    opacity: 0;
-  }
+  z-index: 20;
 
-  to {
-    opacity: 1;
-  }
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 7px;
+
+  border: 1px solid rgba(255, 255, 255, 0.15);
+
+  background: rgba(10, 10, 10, 0.8);
+
+  backdrop-filter: blur(10px);
 }
 
-@keyframes lightboxScaleIn {
+.lightbox-controls button {
+  min-width: 38px;
+  height: 32px;
 
-  from {
-    opacity: 0;
+  padding: 0 10px;
 
-    transform: scale(0.96);
-  }
+  border: 1px solid rgba(255, 255, 255, 0.15);
 
-  to {
-    opacity: 1;
+  background: transparent;
 
-    transform: scale(1);
-  }
+  color: white;
+
+  font-size: 14px;
+
+  cursor: pointer;
 }
 
+.lightbox-controls button:hover {
+  background: white;
+  color: black;
+}
 
-/* =========================================
-   LIGHTBOX MOBILE
-========================================= */
+.lightbox-controls span {
+  min-width: 55px;
 
-@media (max-width: 600px) {
+  text-align: center;
 
-  .image-lightbox {
-    padding: 18px;
-  }
+  color: rgba(255, 255, 255, 0.7);
 
-  .lightbox-content {
-    width: 100%;
-  }
-
-  .lightbox-content img {
-    max-width: 100%;
-
-    max-height: 72vh;
-
-    width: auto;
-
-    height: auto;
-
-    border-radius: 8px;
-  }
-
-  .lightbox-label {
-    font-size: 9px;
-  }
-
-  .lightbox-caption h3 {
-    font-size: 17px;
-  }
-
-  .lightbox-caption p {
-    font-size: 12px;
-  }
-
-  .lightbox-close {
-    top: 15px;
-    right: 15px;
-
-    width: 40px;
-    height: 40px;
-
-    font-size: 24px;
-  }
+  font-size: 11px;
+  letter-spacing: 1px;
 }
