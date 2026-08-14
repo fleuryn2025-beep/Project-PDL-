@@ -86,26 +86,26 @@ const leadership = {
   organization: "KHAD ECO TEAM UMY",
 
   position:
-    "Electrical Staff → Chief Electrical → Deputy General Manager",
+    "Staff Electrical → Chief Electrical → Deputy General Manager",
 
   period: "2021 — 2024",
 
   certificates: [
     {
       title: "Certificate of Appreciation",
-      role: "Deputy General Manager",
+      role: "Electrical Staff",
       image: `${import.meta.env.BASE_URL}awards/leadership/WPS Photo(8).jpeg`,
     },
 
     {
       title: "Certificate of Appreciation",
-      role: "Leadership Achievement",
+      role: "Chief Electrical",
       image: `${import.meta.env.BASE_URL}awards/leadership/WPS Photo(9).jpeg`,
     },
 
     {
       title: "Certificate of Appreciation",
-      role: "Leadership Achievement",
+      role: "Deputy General Manager",
       image: `${import.meta.env.BASE_URL}awards/leadership/WPS Photo(10).jpeg`,
     },
   ],
