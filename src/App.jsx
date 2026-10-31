@@ -590,16 +590,6 @@ function HomePage({ onNavigate }) {
           </div>
 
           <div className="hero-stats">
-            <div className="stat">
-              <strong>02+</strong>
-              <span>Years Experience</span>
-            </div>
-
-            <div className="stat">
-              <strong>10+</strong>
-              <span>Projects</span>
-            </div>
-
             <div className="stat stat-address">
               <strong>ALAMAT</strong>
               <span>
