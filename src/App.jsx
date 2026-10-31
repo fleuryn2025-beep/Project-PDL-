@@ -619,11 +619,6 @@ function HomePage({ onNavigate }) {
                 className="engineer-logo"
               />
             </div>
-
-            <div className="card-bottom">
-              <span>ELECTRICAL</span>
-              <span>PROJECTS</span>
-            </div>
           </div>
         </div>{" "}
         {/* Penutup hero-visual */}
