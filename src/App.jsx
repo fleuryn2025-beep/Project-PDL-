@@ -872,15 +872,29 @@ function ExperiencePage({ onNavigate }) {
   };
 
   const getProjectMeta = (project) => {
+    const normalizeKey = (key) => key.toLowerCase().replace(/[^a-z]/g, "");
+    const projectEntries = Object.entries(project).filter(
+      ([key]) => key !== "id",
+    );
+    const targetIndex = projectEntries.findIndex(([key]) =>
+      ["targetpenyelesaian", "targetcompletion", "targetselesai"].includes(
+        normalizeKey(key),
+      ),
+    );
+    const entriesThroughTarget =
+      targetIndex === -1
+        ? projectEntries
+        : projectEntries.slice(0, targetIndex + 1);
+
     const isIdentifierKey = (key) => {
-      const normalized = key.toLowerCase().replace(/[^a-z]/g, "");
+      const normalized = normalizeKey(key);
 
       return ["id", "no", "nomor", "number", "index", "serial"].some((token) =>
         normalized.includes(token),
       );
     };
 
-    const entries = Object.entries(project)
+    return entriesThroughTarget
       .filter(([key]) => {
         const normalized = key.toLowerCase().trim();
 
@@ -911,10 +925,7 @@ function ExperiencePage({ onNavigate }) {
       .map(([key, value]) => ({
         label: key,
         value: value,
-      }))
-      .filter((item) => String(item.value).trim());
-
-    return entries.slice(0, 5);
+      }));
   };
 
   return (
