@@ -855,6 +855,9 @@ function ExperiencePage({ onNavigate }) {
 
   const getProjectTitle = (project) => {
     const candidates = [
+      project["Nama Client"],
+      project["Client Name"],
+      project["Client"],
       project["Project Name"],
       project["Nama Project"],
       project["Judul"],
@@ -883,6 +886,9 @@ function ExperiencePage({ onNavigate }) {
 
         if (
           [
+            "nama client",
+            "client name",
+            "client",
             "project name",
             "nama project",
             "judul",
