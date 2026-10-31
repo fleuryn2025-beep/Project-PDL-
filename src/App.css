@@ -979,6 +979,26 @@ a {
   text-transform: uppercase;
 }
 
+.stat-address {
+  max-width: 310px;
+  min-width: 0;
+}
+
+.stat-address strong {
+  color: var(--accent-light);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.stat-address span {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.6;
+  text-transform: none;
+}
+
 /* =========================================================
    HERO VISUAL
 ========================================================= */

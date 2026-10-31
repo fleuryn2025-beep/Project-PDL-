@@ -600,9 +600,12 @@ function HomePage({ onNavigate }) {
               <span>Projects</span>
             </div>
 
-            <div className="stat">
-              <strong>03+</strong>
-              <span>Industries</span>
+            <div className="stat stat-address">
+              <strong>ALAMAT</strong>
+              <span>
+                Jl. Perumahan Pesona Paramita 2 No.34, Padangsambian Kaja, Kec.
+                Denpasar Barat, Kota Denpasar, Bali 80117
+              </span>
             </div>
           </div>
         </div>
