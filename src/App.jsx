@@ -949,6 +949,15 @@ function ExperiencePage({ onNavigate }) {
             {projects.map((project, index) => {
               const title = getProjectTitle(project);
               const meta = getProjectMeta(project);
+              const projectDate = String(
+                project["Tanggal"] || project["Date"] || "",
+              ).trim();
+              const projectLocation = String(
+                project["Lokasi"] ||
+                  project["Location"] ||
+                  project["Area"] ||
+                  "",
+              ).trim();
 
               return (
                 <article className="experience-item" key={project.id || index}>
@@ -957,17 +966,12 @@ function ExperiencePage({ onNavigate }) {
                   </div>
 
                   <div className="experience-content">
-                    <div className="experience-meta">
-                      <span>
-                        {project["Tanggal"] || project["Date"] || "Project"}
-                      </span>
-                      <span>
-                        {project["Lokasi"] ||
-                          project["Location"] ||
-                          project["Area"] ||
-                          "-"}
-                      </span>
-                    </div>
+                    {(projectDate || projectLocation) && (
+                      <div className="experience-meta">
+                        {projectDate && <span>{projectDate}</span>}
+                        {projectLocation && <span>{projectLocation}</span>}
+                      </div>
+                    )}
 
                     <h3>{title}</h3>
 
