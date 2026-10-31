@@ -144,6 +144,7 @@ function App() {
         console.error("Error loading awards:", error);
       });
   }, []);
+
   /* =======================================================
      LIGHTBOX
   ======================================================= */
@@ -413,39 +414,13 @@ function App() {
         return <ExperiencePage onNavigate={changePage} />;
 
       /* ===================================================
-         AWARDS
+         TEMPORARILY EMPTY REPORT PAGES
       =================================================== */
 
       case "awards":
-        return (
-          <AwardsPage
-            awards={awards}
-            selectedAward={selectedAward}
-            leadership={leadership}
-            onAwardChange={handleAwardChange}
-            onOpenImage={openAwardImage}
-            onOpenCertificate={openLeadershipCertificate}
-          />
-        );
-
-      /* ===================================================
-         CERTIFICATIONS
-      =================================================== */
-
       case "certifications":
-        return (
-          <CertificationsPage
-            onNavigate={changePage}
-            onOpenCertificate={openLeadershipCertificate}
-          />
-        );
-
-      /* ===================================================
-         CONTACT
-      =================================================== */
-
       case "contact":
-        return <ContactPage onNavigate={changePage} />;
+        return null;
 
       default:
         return <HomePage onNavigate={changePage} />;
