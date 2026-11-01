@@ -2291,6 +2291,115 @@ a {
   color: #ffb4b4;
 }
 
+.bast-report-page {
+  min-height: 100vh;
+  padding: 50px 0;
+}
+
+.bast-report-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.bast-report-heading h2 {
+  margin: 6px 0 0;
+  color: var(--text);
+  font-size: clamp(24px, 3vw, 38px);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+.bast-report-message {
+  margin: 0 0 24px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.bast-report-error {
+  color: #ffb4b4;
+}
+
+.bast-table-scroll {
+  overflow: auto;
+  max-height: 72vh;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: rgba(9, 13, 21, 0.96);
+  scrollbar-color: var(--accent) var(--bg-card);
+}
+
+.bast-table {
+  width: max-content;
+  min-width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  color: var(--text-soft);
+  font-size: 11px;
+}
+
+.bast-table th,
+.bast-table td {
+  min-width: 110px;
+  max-width: 240px;
+  padding: 11px 12px;
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.bast-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #141b2a;
+  color: var(--accent-light);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+}
+
+.bast-table thead tr + tr th {
+  top: 36px;
+  background: #101725;
+}
+
+.bast-table tbody td {
+  height: 58px;
+  background: rgba(13, 18, 28, 0.78);
+}
+
+.bast-table tbody td:nth-child(1),
+.bast-table tbody td:nth-child(2),
+.bast-table tbody td:nth-child(3),
+.bast-table tbody td:nth-child(12),
+.bast-table tbody td:nth-child(13),
+.bast-table tbody td:nth-child(14) {
+  color: var(--accent-light);
+}
+
+.bast-table .bast-status-done {
+  color: var(--success);
+  font-weight: 700;
+}
+
+.bast-table .bast-status-pending {
+  color: #f2d27b;
+  font-weight: 700;
+}
+
+.bast-table .bast-status-on-proses {
+  color: #ffba82;
+  font-weight: 700;
+}
+
 @media (max-width: 768px) {
   .project-search,
   .project-search-empty,
@@ -2298,6 +2407,11 @@ a {
   .progress-summary,
   .progress-report-message {
     margin-left: 0;
+  }
+
+  .bast-report-heading {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .progress-report-heading {

@@ -107,6 +107,13 @@ const parseCsvRows = (text) => {
   );
 };
 
+const normalizeProjectName = (value) =>
+  String(value ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
+
 /* =========================================================
    NAVIGATION
 ========================================================= */
@@ -546,8 +553,7 @@ function App() {
 
       case "contact":
         return (
-          <ProjectReportPage
-            type="BAST"
+          <ProjectBastPage
             projectTitle={selectedProjectTitle}
             onNavigate={changePage}
           />
@@ -1418,6 +1424,198 @@ function ProjectProgressPage({ projectTitle, onNavigate }) {
             </div>
               </>
             )}
+          </div>
+        )}
+
+        <button
+          type="button"
+          className="page-next-button"
+          onClick={() => onNavigate("experience")}
+        >
+          Kembali ke List Project →
+        </button>
+      </div>
+    </section>
+  );
+}
+
+function ProjectBastPage({ projectTitle, onNavigate }) {
+  const BAST_CSV_URL =
+    "https://docs.google.com/spreadsheets/d/1WA_wMChzfqicu5i5uTK-qgPmpQcnGbMArWWKMIDipXU/export?format=csv&gid=0";
+  const SPREADSHEET_URL =
+    "https://docs.google.com/spreadsheets/d/1WA_wMChzfqicu5i5uTK-qgPmpQcnGbMArWWKMIDipXU/edit?pli=1&gid=0#gid=0";
+  const bastColumns = [
+    { group: "No Dokumen", stage: "2", index: 8 },
+    { group: "No Dokumen", stage: "3", index: 9 },
+    { group: "No Dokumen", stage: "4", index: 10 },
+    { group: "Status Pembuatan Dokumen", stage: "2", index: 11 },
+    { group: "Status Pembuatan Dokumen", stage: "3", index: 12 },
+    { group: "Status Pembuatan Dokumen", stage: "4", index: 13 },
+    { group: "Catatan 1", stage: "", index: 14 },
+    { group: "Status Sign Properti", stage: "2", index: 15 },
+    { group: "Status Sign Properti", stage: "3", index: 16 },
+    { group: "Status Sign Properti", stage: "4", index: 17 },
+    { group: "Catatan 2", stage: "", index: 18 },
+    { group: "Dokumen", stage: "2", index: 19 },
+    { group: "Dokumen", stage: "3", index: 20 },
+    { group: "Dokumen", stage: "4", index: 21 },
+  ];
+
+  const [projectRow, setProjectRow] = useState(null);
+  const [loading, setLoading] = useState(Boolean(projectTitle));
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!projectTitle) {
+      setProjectRow(null);
+      setLoading(false);
+      setError("");
+      return undefined;
+    }
+
+    let isMounted = true;
+    setProjectRow(null);
+    setLoading(true);
+    setError("");
+
+    const loadBastReport = async () => {
+      try {
+        const response = await fetch(BAST_CSV_URL, {
+          cache: "no-store",
+        });
+        if (!response.ok) {
+          throw new Error("Gagal mengambil data spreadsheet BAST.");
+        }
+
+        const rows = parseCsvRows(await response.text());
+        const header = rows[0] || [];
+        if (
+          header[1]?.trim().toLowerCase() !== "properti" ||
+          header[8]?.trim().toLowerCase() !== "no dokumen"
+        ) {
+          throw new Error("Format sheet Report BAST tidak ditemukan.");
+        }
+
+        const matchingRow = rows
+          .slice(1)
+          .find(
+            (row) =>
+              normalizeProjectName(row[1]) ===
+              normalizeProjectName(projectTitle),
+          );
+
+        if (!matchingRow) {
+          throw new Error(
+            `Data BAST untuk project "${projectTitle}" belum ditemukan.`,
+          );
+        }
+
+        if (isMounted) {
+          setProjectRow(matchingRow);
+        }
+      } catch (loadError) {
+        console.error("Error loading project BAST report:", loadError);
+        if (isMounted) {
+          setError(loadError.message || "Gagal memuat data Report BAST.");
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadBastReport();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [projectTitle]);
+
+  const columnGroups = bastColumns.reduce((groups, column) => {
+    const previousGroup = groups[groups.length - 1];
+    if (previousGroup?.label === column.group) {
+      previousGroup.columns.push(column);
+    } else {
+      groups.push({ label: column.group, columns: [column] });
+    }
+    return groups;
+  }, []);
+
+  return (
+    <section className="bast-report-page">
+      <div className="section-container">
+        <div className="bast-report-heading">
+          <div>
+            <span className="achievement-label">PROJECT TERPILIH</span>
+            <h2>{projectTitle || "Pilih project dari List Project"}</h2>
+          </div>
+          <a
+            className="progress-source-link"
+            href={SPREADSHEET_URL}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Buka Spreadsheet ↗
+          </a>
+        </div>
+
+        {!projectTitle && (
+          <p className="bast-report-message">
+            Pilih tombol Report BAST pada project untuk melihat datanya.
+          </p>
+        )}
+
+        {loading && (
+          <p className="bast-report-message">Memuat data Report BAST...</p>
+        )}
+
+        {!loading && error && (
+          <p className="bast-report-message bast-report-error">{error}</p>
+        )}
+
+        {!loading && projectRow && (
+          <div className="bast-table-scroll">
+            <table className="bast-table">
+              <thead>
+                <tr>
+                  {columnGroups.map((group) => (
+                    <th key={group.label} colSpan={group.columns.length}>
+                      {group.label}
+                    </th>
+                  ))}
+                </tr>
+                <tr>
+                  {bastColumns.map((column) => (
+                    <th key={`${column.index}-stage`}>
+                      {column.stage || "—"}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  {bastColumns.map((column) => {
+                    const value = projectRow[column.index]?.trim() || "";
+                    const statusClass =
+                      /^(done|pending|on proses)$/i.test(value)
+                        ? ` bast-status-${value
+                            .toLowerCase()
+                            .replace(/\s+/g, "-")}`
+                        : "";
+
+                    return (
+                      <td
+                        key={`${column.index}-value`}
+                        className={`bast-cell${statusClass}`}
+                      >
+                        {value || "—"}
+                      </td>
+                    );
+                  })}
+                </tr>
+              </tbody>
+            </table>
           </div>
         )}
 
