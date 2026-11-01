@@ -55,6 +55,58 @@ const handleImageFallback = (event) => {
   event.currentTarget.src = FALLBACK_IMAGE;
 };
 
+const parseCsvRows = (text) => {
+  const rows = [];
+  let row = [];
+  let value = "";
+  let inQuotes = false;
+
+  for (let i = 0; i < text.length; i += 1) {
+    const char = text[i];
+    const next = text[i + 1];
+
+    if (char === '"') {
+      if (inQuotes && next === '"') {
+        value += '"';
+        i += 1;
+      } else {
+        inQuotes = !inQuotes;
+      }
+      continue;
+    }
+
+    if (char === "," && !inQuotes) {
+      row.push(value);
+      value = "";
+      continue;
+    }
+
+    if ((char === "\n" || char === "\r") && !inQuotes) {
+      if (char === "\r" && next === "\n") {
+        i += 1;
+      }
+      if (row.length > 0 || value.length > 0) {
+        row.push(value);
+        rows.push(row);
+        row = [];
+        value = "";
+      }
+      continue;
+    }
+
+    value += char;
+  }
+
+  if (row.length > 0 || value.length > 0) {
+    row.push(value);
+    rows.push(row);
+  }
+
+  return rows.filter((line) =>
+    line.some((cell) => String(cell).trim() !== ""),
+  );
+};
+
 /* =========================================================
    NAVIGATION
 ========================================================= */
@@ -95,6 +147,7 @@ const getRouteFromLocation = () => {
     about: "about",
     experience: "experience",
     "report-pr": "awards",
+    "report-progress": "certifications",
     certifications: "certifications",
     "report-bast": "contact",
   };
@@ -203,6 +256,7 @@ function App() {
 
     const routeByPage = {
       awards: "report-pr",
+      certifications: "report-progress",
       contact: "report-bast",
     };
     const route = routeByPage[page] || page;
@@ -483,7 +537,12 @@ function App() {
         );
 
       case "certifications":
-        return null;
+        return (
+          <ProjectProgressPage
+            projectTitle={selectedProjectTitle}
+            onNavigate={changePage}
+          />
+        );
 
       case "contact":
         return (
@@ -769,58 +828,6 @@ function ExperiencePage({ onOpenReport }) {
   const GOOGLE_SHEET_CSV_URL =
     "https://docs.google.com/spreadsheets/d/1l7pMIQ7yZ8LmkyOK4HJ5rPIaabGCjUPXisn0E_aJPx0/export?format=csv&gid=2119967716";
 
-  const parseCsv = (text) => {
-    const rows = [];
-    let row = [];
-    let value = "";
-    let inQuotes = false;
-
-    for (let i = 0; i < text.length; i += 1) {
-      const char = text[i];
-      const next = text[i + 1];
-
-      if (char === '"') {
-        if (inQuotes && next === '"') {
-          value += '"';
-          i += 1;
-        } else {
-          inQuotes = !inQuotes;
-        }
-        continue;
-      }
-
-      if (char === "," && !inQuotes) {
-        row.push(value);
-        value = "";
-        continue;
-      }
-
-      if ((char === "\n" || char === "\r") && !inQuotes) {
-        if (char === "\r" && next === "\n") {
-          i += 1;
-        }
-        if (row.length > 0 || value.length > 0) {
-          row.push(value);
-          rows.push(row);
-          row = [];
-          value = "";
-        }
-        continue;
-      }
-
-      value += char;
-    }
-
-    if (row.length > 0 || value.length > 0) {
-      row.push(value);
-      rows.push(row);
-    }
-
-    return rows.filter((line) =>
-      line.some((cell) => String(cell).trim() !== ""),
-    );
-  };
-
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -840,7 +847,7 @@ function ExperiencePage({ onOpenReport }) {
         }
 
         const csvText = await response.text();
-        const rows = parseCsv(csvText);
+        const rows = parseCsvRows(csvText);
 
         if (rows.length < 2) {
           throw new Error("Sheet tidak memiliki data yang valid.");
@@ -1074,6 +1081,17 @@ function ExperiencePage({ onOpenReport }) {
                       </div>
 
                       <div className="project-report-actions">
+                        {title.toLowerCase().includes("wico") && (
+                          <button
+                            type="button"
+                            className="secondary-button"
+                            onClick={() =>
+                              onOpenReport("certifications", title)
+                            }
+                          >
+                            Report Progres <span>→</span>
+                          </button>
+                        )}
                         <button
                           type="button"
                           className="secondary-button"
@@ -1148,6 +1166,249 @@ function ProjectReportPage({ type, projectTitle, onNavigate }) {
           onClick={() => onNavigate("experience")}
         >
           Pilih Project →
+        </button>
+      </div>
+    </section>
+  );
+}
+
+function ProjectProgressPage({ projectTitle, onNavigate }) {
+  const PROGRESS_CSV_URL =
+    "https://docs.google.com/spreadsheets/d/1b484ltGg0Gw1PwUriknvyRLckYZTtvtf/export?format=csv&gid=936134645";
+  const SPREADSHEET_URL =
+    "https://docs.google.com/spreadsheets/d/1b484ltGg0Gw1PwUriknvyRLckYZTtvtf/edit?gid=936134645#gid=936134645";
+
+  const [progressData, setProgressData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadProgress = async () => {
+      try {
+        const response = await fetch(PROGRESS_CSV_URL, {
+          cache: "no-store",
+        });
+        if (!response.ok) {
+          throw new Error("Gagal mengambil data spreadsheet progres.");
+        }
+
+        const rows = parseCsvRows(await response.text());
+        const headerIndex = rows.findIndex(
+          (row) =>
+            row[1]?.trim().toUpperCase() === "NO" &&
+            row[2]?.trim().toUpperCase() === "URAIAN PEKERJAAN",
+        );
+
+        if (headerIndex === -1) {
+          throw new Error("Format sheet M PRJ DIMA tidak ditemukan.");
+        }
+
+        const monthLabel =
+          rows[headerIndex].find((cell) => /[A-Z]+\s+\d{4}/i.test(cell)) ||
+          "PROGRESS PROJECT";
+        const dayLabels = rows[headerIndex + 1]
+          .slice(13, 44)
+          .filter((day) => day.trim());
+        const tableRows = rows.slice(headerIndex + 2);
+        const deviationIndex = tableRows.findIndex((row) =>
+          /^deviasi$/i.test(row[11]?.trim() || ""),
+        );
+        const bodyRows = (
+          deviationIndex === -1
+            ? tableRows
+            : tableRows.slice(0, deviationIndex + 1)
+        )
+          .filter((row) =>
+            row.slice(1, 45).some((cell) => String(cell).trim()),
+          );
+
+        if (dayLabels.length === 0 || bodyRows.length === 0) {
+          throw new Error("Data progres pada sheet M PRJ DIMA kosong.");
+        }
+
+        if (isMounted) {
+          setProgressData({ monthLabel, dayLabels, bodyRows });
+          setError("");
+        }
+      } catch (loadError) {
+        console.error("Error loading M PRJ DIMA progress:", loadError);
+        if (isMounted) {
+          setError(loadError.message || "Gagal memuat data progres.");
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadProgress();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const summaryRows = progressData?.bodyRows.filter((row) =>
+    /^(rencana harian|kumulatif rencana|realisasi harian|kumulatif realisasi|deviasi)/i.test(
+      row[11]?.trim() || "",
+    ),
+  ) || [];
+  const getLatestSummaryValue = (label) => {
+    const summaryRow = summaryRows.find((row) =>
+      row[11]?.trim().toLowerCase().startsWith(label.toLowerCase()),
+    );
+    const dailyValues = summaryRow?.slice(13, 44).filter((value) => value.trim());
+
+    return dailyValues?.[dailyValues.length - 1] || "—";
+  };
+
+  return (
+    <section className="progress-report-page">
+      <div className="section-container">
+        <div className="section-heading project-heading">
+          <h2>Report Progres</h2>
+        </div>
+
+        <div className="progress-report-heading">
+          <div>
+            <span className="achievement-label">PROJECT</span>
+            <h3>{projectTitle || "PT Wico Interna"}</h3>
+            <p>Data progres dari sheet M PRJ DIMA</p>
+          </div>
+          <a
+            className="progress-source-link"
+            href={SPREADSHEET_URL}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Buka Spreadsheet ↗
+          </a>
+        </div>
+
+        {loading && (
+          <p className="progress-report-message">Memuat data progres...</p>
+        )}
+
+        {!loading && error && (
+          <p className="progress-report-message progress-report-error">
+            {error}
+          </p>
+        )}
+
+        {!loading && !error && progressData && (
+          <>
+            <div className="progress-summary">
+              <article>
+                <span>RENCANA KUMULATIF</span>
+                <strong>{getLatestSummaryValue("kumulatif rencana")}</strong>
+              </article>
+              <article>
+                <span>REALISASI KUMULATIF</span>
+                <strong>
+                  {getLatestSummaryValue("kumulatif realisasi")}
+                </strong>
+              </article>
+              <article>
+                <span>DEVIASI</span>
+                <strong>{getLatestSummaryValue("deviasi")}</strong>
+              </article>
+            </div>
+
+            <div className="progress-sheet-caption">
+              <span>{progressData.monthLabel}</span>
+              <span>M PRJ DIMA</span>
+            </div>
+
+            <div className="progress-table-scroll">
+              <table className="progress-table">
+                <thead>
+                  <tr>
+                    <th rowSpan="2">NO</th>
+                    <th rowSpan="2">URAIAN PEKERJAAN</th>
+                    <th rowSpan="2">SATUAN</th>
+                    <th rowSpan="2">VOLUME</th>
+                    <th rowSpan="2">BOBOT</th>
+                    <th colSpan={progressData.dayLabels.length}>
+                      {progressData.monthLabel}
+                    </th>
+                    <th rowSpan="2">TOTAL</th>
+                  </tr>
+                  <tr>
+                    {progressData.dayLabels.map((day, index) => (
+                      <th key={`${day}-${index}`}>{day}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {progressData.bodyRows.map((row, rowIndex) => {
+                    const isSummary = /^(rencana harian|kumulatif rencana|realisasi harian|kumulatif realisasi|deviasi)/i.test(
+                      row[11]?.trim() || "",
+                    );
+                    const isSection =
+                      Boolean(row[1]?.trim()) &&
+                      !row[10]?.trim() &&
+                      !row[11]?.trim() &&
+                      !row[12]?.trim() &&
+                      Boolean(row[9]?.trim());
+                    const description = isSummary
+                      ? row[11].trim()
+                      : row
+                          .slice(2, isSection ? 9 : 10)
+                          .map((cell) => cell.trim())
+                          .filter(Boolean)
+                          .join(" ");
+                    const isTotal =
+                      !row[1]?.trim() &&
+                      !description &&
+                      row[12]?.trim() === "100,00%";
+                    const dailyCells = progressData.dayLabels.map(
+                      (_, dayIndex) => row[13 + dayIndex] || "",
+                    );
+
+                    return (
+                      <tr
+                        key={`progress-${rowIndex}`}
+                        className={[
+                          isSection ? "progress-section-row" : "",
+                          isSummary ? "progress-summary-row" : "",
+                          isTotal ? "progress-total-row" : "",
+                        ]
+                          .filter(Boolean)
+                          .join(" ")}
+                      >
+                        <td>{row[1]?.trim() || ""}</td>
+                        <td>{description || (isTotal ? "TOTAL BOBOT" : "")}</td>
+                        <td>{isSummary ? "" : row[10]?.trim() || ""}</td>
+                        <td>{isSummary ? "" : row[11]?.trim() || ""}</td>
+                        <td>
+                          {isSummary
+                            ? ""
+                            : isSection
+                            ? row[9]?.trim()
+                            : row[12]?.trim() || ""}
+                        </td>
+                        {dailyCells.map((cell, dayIndex) => (
+                          <td key={`day-${dayIndex}`}>{cell.trim()}</td>
+                        ))}
+                        <td>{row[44]?.trim() || ""}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
+
+        <button
+          type="button"
+          className="page-next-button"
+          onClick={() => onNavigate("experience")}
+        >
+          Kembali ke List Project →
         </button>
       </div>
     </section>
