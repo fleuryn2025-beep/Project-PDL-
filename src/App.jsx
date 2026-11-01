@@ -1148,10 +1148,6 @@ function ProjectReportPage({ type, projectTitle, onNavigate }) {
   return (
     <section className="experience-page project-report-page">
       <div className="section-container">
-        <div className="section-heading project-heading">
-          <h2>Report {type}</h2>
-        </div>
-
         <div className="project-report-selection">
           <span className="achievement-label">PROJECT TERPILIH</span>
           <h3>{hasProject ? projectTitle : "Belum ada proyek dipilih"}</h3>
@@ -1274,10 +1270,6 @@ function ProjectProgressPage({ projectTitle, onNavigate }) {
   return (
     <section className="progress-report-page">
       <div className="section-container">
-        <div className="section-heading project-heading">
-          <h2>Report Progres</h2>
-        </div>
-
         <div className="progress-report-heading">
           <div>
             <span className="achievement-label">PROJECT</span>
