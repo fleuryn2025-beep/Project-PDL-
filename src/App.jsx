@@ -86,12 +86,36 @@ const navigation = [
   },
 ];
 
+const getRouteFromLocation = () => {
+  const [route = "home", query = ""] = window.location.hash
+    .slice(1)
+    .split("?");
+  const pageByRoute = {
+    home: "home",
+    about: "about",
+    experience: "experience",
+    "report-pr": "awards",
+    certifications: "certifications",
+    "report-bast": "contact",
+  };
+
+  return {
+    page: pageByRoute[route] || "home",
+    projectTitle: new URLSearchParams(query).get("project") || "",
+  };
+};
+
 /* =========================================================
    APP
 ========================================================= */
 
 function App() {
-  const [activePage, setActivePage] = useState("home");
+  const [activePage, setActivePage] = useState(
+    () => getRouteFromLocation().page,
+  );
+  const [selectedProjectTitle, setSelectedProjectTitle] = useState(
+    () => getRouteFromLocation().projectTitle,
+  );
 
   const [awards, setAwards] = useState([]);
   const [leadership, setLeadership] = useState(null);
@@ -173,14 +197,46 @@ function App() {
      CHANGE PAGE
   ======================================================= */
 
-  const changePage = (page) => {
+  const changePage = (page, projectTitle = "") => {
     setActivePage(page);
+    setSelectedProjectTitle(projectTitle);
+
+    const routeByPage = {
+      awards: "report-pr",
+      contact: "report-bast",
+    };
+    const route = routeByPage[page] || page;
+    const query = projectTitle
+      ? `?project=${encodeURIComponent(projectTitle)}`
+      : "";
+
+    window.history.pushState(null, "", `#${route}${query}`);
 
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
   };
+
+  const openProjectReport = (page, projectTitle) => {
+    changePage(page, projectTitle);
+  };
+
+  useEffect(() => {
+    const syncPageWithLocation = () => {
+      const route = getRouteFromLocation();
+      setActivePage(route.page);
+      setSelectedProjectTitle(route.projectTitle);
+    };
+
+    window.addEventListener("popstate", syncPageWithLocation);
+    window.addEventListener("hashchange", syncPageWithLocation);
+
+    return () => {
+      window.removeEventListener("popstate", syncPageWithLocation);
+      window.removeEventListener("hashchange", syncPageWithLocation);
+    };
+  }, []);
 
   /* =======================================================
      RESET IMAGE
@@ -411,16 +467,32 @@ function App() {
       =================================================== */
 
       case "experience":
-        return <ExperiencePage onNavigate={changePage} />;
+        return <ExperiencePage onOpenReport={openProjectReport} />;
 
       /* ===================================================
-         TEMPORARILY EMPTY REPORT PAGES
+         PROJECT REPORT PAGES
       =================================================== */
 
       case "awards":
+        return (
+          <ProjectReportPage
+            type="PR"
+            projectTitle={selectedProjectTitle}
+            onNavigate={changePage}
+          />
+        );
+
       case "certifications":
-      case "contact":
         return null;
+
+      case "contact":
+        return (
+          <ProjectReportPage
+            type="BAST"
+            projectTitle={selectedProjectTitle}
+            onNavigate={changePage}
+          />
+        );
 
       default:
         return <HomePage onNavigate={changePage} />;
@@ -693,7 +765,7 @@ function AboutPage({ onNavigate }) {
    EXPERIENCE PAGE
 ========================================================= */
 
-function ExperiencePage({ onNavigate }) {
+function ExperiencePage({ onOpenReport }) {
   const GOOGLE_SHEET_CSV_URL =
     "https://docs.google.com/spreadsheets/d/1l7pMIQ7yZ8LmkyOK4HJ5rPIaabGCjUPXisn0E_aJPx0/export?format=csv&gid=2119967716";
 
@@ -752,6 +824,7 @@ function ExperiencePage({ onNavigate }) {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     let isMounted = true;
@@ -891,12 +964,41 @@ function ExperiencePage({ onNavigate }) {
       }));
   };
 
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+  const filteredProjects = projects.filter((project) => {
+    if (!normalizedSearch) {
+      return true;
+    }
+
+    return [getProjectTitle(project), ...Object.values(project)].some((value) =>
+      String(value ?? "")
+        .toLowerCase()
+        .includes(normalizedSearch),
+    );
+  });
+
   return (
     <section className="experience-page">
       <div className="section-container">
         <div className="section-heading project-heading">
           <h2>Project</h2>
         </div>
+
+        {!loading && !error && projects.length > 0 && (
+          <div className="project-search">
+            <label htmlFor="project-search-input">CARI PROJECT</label>
+            <input
+              id="project-search-input"
+              type="search"
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              placeholder="Cari nama, lokasi, status, atau detail project..."
+            />
+            <span className="project-search-count" aria-live="polite">
+              Menampilkan {filteredProjects.length} dari {projects.length} project
+            </span>
+          </div>
+        )}
 
         {loading && (
           <div className="experience-timeline">
@@ -920,50 +1022,78 @@ function ExperiencePage({ onNavigate }) {
 
         {!loading && !error && (
           <div className="experience-timeline">
-            {projects.map((project, index) => {
-              const title = getProjectTitle(project);
-              const meta = getProjectMeta(project);
-              const projectDate = String(
-                project["Tanggal"] || project["Date"] || "",
-              ).trim();
-              const projectLocation = String(
-                project["Lokasi"] ||
-                  project["Location"] ||
-                  project["Area"] ||
-                  "",
-              ).trim();
+            {filteredProjects.length === 0 ? (
+              <p className="project-search-empty">
+                Project dengan kata kunci “{searchTerm}” tidak ditemukan.
+              </p>
+            ) : (
+              filteredProjects.map((project, index) => {
+                const title = getProjectTitle(project);
+                const meta = getProjectMeta(project);
+                const projectDate = String(
+                  project["Tanggal"] || project["Date"] || "",
+                ).trim();
+                const projectLocation = String(
+                  project["Lokasi"] ||
+                    project["Location"] ||
+                    project["Area"] ||
+                    "",
+                ).trim();
 
-              return (
-                <article className="experience-item" key={project.id || index}>
-                  <div className="experience-marker">
-                    {String(index + 1).padStart(2, "0")}
-                  </div>
-
-                  <div className="experience-content">
-                    {(projectDate || projectLocation) && (
-                      <div className="experience-meta">
-                        {projectDate && <span>{projectDate}</span>}
-                        {projectLocation && <span>{projectLocation}</span>}
-                      </div>
-                    )}
-
-                    <h3>{title}</h3>
-
-                    <div className="experience-achievement">
-                      <span className="achievement-label">DETAIL PROJECT</span>
-
-                      <ul>
-                        {meta.map((item) => (
-                          <li key={`${title}-${item.label}`}>
-                            <strong>{item.label}:</strong> {item.value}
-                          </li>
-                        ))}
-                      </ul>
+                return (
+                  <article
+                    className="experience-item"
+                    key={project.id || index}
+                  >
+                    <div className="experience-marker">
+                      {String(index + 1).padStart(2, "0")}
                     </div>
-                  </div>
-                </article>
-              );
-            })}
+
+                    <div className="experience-content">
+                      {(projectDate || projectLocation) && (
+                        <div className="experience-meta">
+                          {projectDate && <span>{projectDate}</span>}
+                          {projectLocation && <span>{projectLocation}</span>}
+                        </div>
+                      )}
+
+                      <h3>{title}</h3>
+
+                      <div className="experience-achievement">
+                        <span className="achievement-label">
+                          DETAIL PROJECT
+                        </span>
+
+                        <ul>
+                          {meta.map((item) => (
+                            <li key={`${title}-${item.label}`}>
+                              <strong>{item.label}:</strong> {item.value}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div className="project-report-actions">
+                        <button
+                          type="button"
+                          className="secondary-button"
+                          onClick={() => onOpenReport("awards", title)}
+                        >
+                          Report PR <span>→</span>
+                        </button>
+                        <button
+                          type="button"
+                          className="secondary-button"
+                          onClick={() => onOpenReport("contact", title)}
+                        >
+                          Report BAST <span>→</span>
+                        </button>
+                      </div>
+                    </div>
+                  </article>
+                );
+              })
+            )}
           </div>
         )}
 
@@ -989,12 +1119,35 @@ function ExperiencePage({ onNavigate }) {
           </div>
         </div>
 
+      </div>
+    </section>
+  );
+}
+
+function ProjectReportPage({ type, projectTitle, onNavigate }) {
+  const hasProject = Boolean(projectTitle);
+
+  return (
+    <section className="experience-page project-report-page">
+      <div className="section-container">
+        <div className="section-heading project-heading">
+          <h2>Report {type}</h2>
+        </div>
+
+        <div className="project-report-selection">
+          <span className="achievement-label">PROJECT TERPILIH</span>
+          <h3>{hasProject ? projectTitle : "Belum ada proyek dipilih"}</h3>
+          {!hasProject && (
+            <p>Pilih proyek terlebih dahulu untuk membuat Report {type}.</p>
+          )}
+        </div>
+
         <button
           type="button"
           className="page-next-button"
-          onClick={() => onNavigate("awards")}
+          onClick={() => onNavigate("experience")}
         >
-          Report PR →
+          Pilih Project →
         </button>
       </div>
     </section>

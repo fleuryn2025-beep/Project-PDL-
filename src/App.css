@@ -1590,6 +1590,58 @@ a {
   margin-bottom: 32px;
 }
 
+.project-search {
+  max-width: 800px;
+  margin: 0 0 28px 104px;
+}
+
+.project-search label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--accent);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.project-search input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 16px;
+  border: 1px solid rgba(124, 140, 255, 0.2);
+  border-radius: var(--radius-md);
+  background: rgba(13, 18, 28, 0.8);
+  color: var(--text);
+  font-size: 14px;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.project-search input::placeholder {
+  color: var(--muted);
+}
+
+.project-search input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+  outline: none;
+}
+
+.project-search-count {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.project-search-empty {
+  margin: 0 0 24px 104px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
 .experience-intro {
   max-width: 760px;
 
@@ -1953,6 +2005,55 @@ a {
 
 .experience-achievement li::marker {
   color: var(--accent);
+}
+
+.project-report-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.project-report-actions .secondary-button {
+  min-height: 40px;
+  padding-inline: 16px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+
+.project-report-selection {
+  max-width: 800px;
+  padding: 22px;
+  border: 1px solid rgba(124, 140, 255, 0.18);
+  border-left: 2px solid var(--accent);
+  border-radius: var(--radius-md);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(124, 140, 255, 0.04)
+  );
+}
+
+.project-report-selection h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(20px, 2.4vw, 32px);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.project-report-selection p {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .project-search,
+  .project-search-empty {
+    margin-left: 0;
+  }
 }
 
 /* =========================================================
