@@ -1178,12 +1178,18 @@ function ProjectProgressPage({ projectTitle, onNavigate }) {
   const SPREADSHEET_URL =
     "https://docs.google.com/spreadsheets/d/1b484ltGg0Gw1PwUriknvyRLckYZTtvtf/edit?gid=936134645#gid=936134645";
 
+  const [isProgressExpanded, setIsProgressExpanded] = useState(false);
   const [progressData, setProgressData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
+    if (!isProgressExpanded || progressData) {
+      return undefined;
+    }
+
     let isMounted = true;
+    setLoading(true);
 
     const loadProgress = async () => {
       try {
@@ -1249,7 +1255,7 @@ function ProjectProgressPage({ projectTitle, onNavigate }) {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [isProgressExpanded, progressData]);
 
   const summaryRows = progressData?.bodyRows.filter((row) =>
     /^(rencana harian|kumulatif rencana|realisasi harian|kumulatif realisasi|deviasi)/i.test(
@@ -1275,8 +1281,22 @@ function ProjectProgressPage({ projectTitle, onNavigate }) {
         <div className="progress-report-heading">
           <div>
             <span className="achievement-label">PROJECT</span>
-            <h3>{projectTitle || "PT Wico Interna"}</h3>
-            <p>Data progres dari sheet M PRJ DIMA</p>
+            <button
+              type="button"
+              className="progress-project-toggle"
+              aria-expanded={isProgressExpanded}
+              onClick={() => setIsProgressExpanded((expanded) => !expanded)}
+            >
+              <h3>{projectTitle || "PT Wico Interna"}</h3>
+              <span aria-hidden="true">
+                {isProgressExpanded ? "−" : "+"}
+              </span>
+            </button>
+            <p>
+              {isProgressExpanded
+                ? "Klik judul proyek untuk menyembunyikan data progres."
+                : "Klik judul proyek untuk melihat data progres."}
+            </p>
           </div>
           <a
             className="progress-source-link"
@@ -1288,18 +1308,22 @@ function ProjectProgressPage({ projectTitle, onNavigate }) {
           </a>
         </div>
 
-        {loading && (
-          <p className="progress-report-message">Memuat data progres...</p>
-        )}
+        {isProgressExpanded && (
+          <div className="progress-report-content">
+            {loading && (
+              <p className="progress-report-message">
+                Memuat data progres...
+              </p>
+            )}
 
-        {!loading && error && (
-          <p className="progress-report-message progress-report-error">
-            {error}
-          </p>
-        )}
+            {!loading && error && (
+              <p className="progress-report-message progress-report-error">
+                {error}
+              </p>
+            )}
 
-        {!loading && !error && progressData && (
-          <>
+            {!loading && !error && progressData && (
+              <>
             <div className="progress-summary">
               <article>
                 <span>RENCANA KUMULATIF</span>
@@ -1400,7 +1424,9 @@ function ProjectProgressPage({ projectTitle, onNavigate }) {
                 </tbody>
               </table>
             </div>
-          </>
+              </>
+            )}
+          </div>
         )}
 
         <button

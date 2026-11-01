@@ -2062,12 +2062,55 @@ a {
   margin: 0 0 24px 104px;
 }
 
-.progress-report-heading h3 {
+.progress-project-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
   margin: 4px 0 0;
+  padding: 0;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.progress-project-toggle h3 {
+  margin: 0;
   color: var(--text);
   font-size: clamp(24px, 3vw, 38px);
   font-weight: 500;
   letter-spacing: -0.04em;
+  transition: color 0.3s ease;
+}
+
+.progress-project-toggle > span {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  color: var(--accent-light);
+  font-size: 19px;
+  transition:
+    border-color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.progress-project-toggle:hover h3 {
+  color: var(--accent-light);
+}
+
+.progress-project-toggle:hover > span {
+  transform: rotate(90deg);
+  border-color: var(--accent);
+}
+
+.progress-project-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 6px;
+  border-radius: 4px;
 }
 
 .progress-report-heading p {
