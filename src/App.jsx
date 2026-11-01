@@ -554,6 +554,7 @@ function App() {
       case "contact":
         return (
           <ProjectBastPage
+            projectTitle={selectedProjectTitle}
             onNavigate={changePage}
           />
         );
@@ -1438,7 +1439,9 @@ function ProjectProgressPage({ projectTitle, onNavigate }) {
   );
 }
 
-function ProjectBastPage({ onNavigate }) {
+function ProjectBastPage({ projectTitle, onNavigate }) {
+  const requestedProjectTitle =
+    projectTitle || getRouteFromLocation().projectTitle;
   const BAST_CSV_URL =
     "https://docs.google.com/spreadsheets/d/1WA_wMChzfqicu5i5uTK-qgPmpQcnGbMArWWKMIDipXU/export?format=csv&gid=0";
   const SPREADSHEET_URL =
@@ -1465,6 +1468,19 @@ function ProjectBastPage({ onNavigate }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!requestedProjectTitle) {
+      setSelectedProject(null);
+      return;
+    }
+
+    const normalizedTitle = normalizeProjectName(requestedProjectTitle);
+    const matchingProject = projects.find(
+      (project) => project.normalizedName === normalizedTitle,
+    );
+    setSelectedProject(matchingProject || null);
+  }, [requestedProjectTitle, projects]);
 
   useEffect(() => {
     let isMounted = true;
@@ -1539,6 +1555,15 @@ function ProjectBastPage({ onNavigate }) {
   const filteredProjects = projects.filter((project) =>
     project.name.toLowerCase().includes(searchTerm.trim().toLowerCase()),
   );
+  const requestedProjectNotFound =
+    !loading &&
+    !error &&
+    requestedProjectTitle &&
+    projects.length > 0 &&
+    !projects.some(
+      (project) =>
+        project.normalizedName === normalizeProjectName(requestedProjectTitle),
+    );
 
   const columnGroups = bastColumns.reduce((groups, column) => {
     const previousGroup = groups[groups.length - 1];
@@ -1580,7 +1605,20 @@ function ProjectBastPage({ onNavigate }) {
           <p className="bast-report-message bast-report-error">{error}</p>
         )}
 
-        {!loading && !error && !selectedProject && (
+        {requestedProjectNotFound && (
+          <div className="bast-report-message bast-report-error">
+            Data BAST untuk project “{requestedProjectTitle}” belum ditemukan.
+            <button
+              className="bast-back-button"
+              onClick={() => onNavigate("contact")}
+              type="button"
+            >
+              ← Kembali ke daftar project
+            </button>
+          </div>
+        )}
+
+        {!loading && !error && !requestedProjectTitle && !selectedProject && (
           <div className="bast-project-picker">
             <label htmlFor="bast-project-search">Cari nama project</label>
             <input
@@ -1622,7 +1660,7 @@ function ProjectBastPage({ onNavigate }) {
           <>
             <button
               className="bast-back-button"
-              onClick={() => setSelectedProject(null)}
+              onClick={() => onNavigate("contact")}
               type="button"
             >
               ← Kembali ke daftar project
