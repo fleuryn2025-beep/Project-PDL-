@@ -2017,6 +2017,32 @@ a {
   color: var(--accent-light);
 }
 
+.progress-chart-back {
+  min-height: 42px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-soft);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.progress-chart-back:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent-light);
+}
+
+.progress-chart-back:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
 .progress-chart {
   margin: 0 0 24px;
   padding: 20px;
@@ -2569,6 +2595,10 @@ a {
   }
 
   .progress-chart-toggle {
+    width: 100%;
+  }
+
+  .progress-chart-back {
     width: 100%;
   }
 
