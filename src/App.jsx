@@ -1177,6 +1177,173 @@ function ProjectReportPage({ type, projectTitle, onNavigate }) {
   );
 }
 
+function ProgressChart({ dayLabels, summaryRows }) {
+  const chartWidth = 900;
+  const chartHeight = 340;
+  const chartPadding = { top: 20, right: 24, bottom: 42, left: 58 };
+  const plotWidth = chartWidth - chartPadding.left - chartPadding.right;
+  const plotHeight = chartHeight - chartPadding.top - chartPadding.bottom;
+  const series = [
+    {
+      label: "Rencana Kumulatif",
+      row: summaryRows.find((row) =>
+        /^kumulatif rencana/i.test(row[11]?.trim() || ""),
+      ),
+      color: "#39d98a",
+      dashed: true,
+    },
+    {
+      label: "Realisasi Kumulatif",
+      row: summaryRows.find((row) =>
+        /^kumulatif realisasi/i.test(row[11]?.trim() || ""),
+      ),
+      color: "#8292ff",
+      dashed: false,
+    },
+  ].map((item) => ({
+    ...item,
+    values: dayLabels.map((_, index) => {
+      const value = item.row?.[13 + index]?.trim();
+      if (!value) {
+        return null;
+      }
+
+      const normalizedValue = value.includes(",")
+        ? value.replace(/\./g, "").replace(",", ".").replace("%", "")
+        : value.replace("%", "");
+      const parsedValue = Number(normalizedValue);
+
+      return Number.isFinite(parsedValue) ? parsedValue : null;
+    }),
+  }));
+  const maximumValue = Math.max(
+    100,
+    ...series.flatMap((item) => item.values.filter((value) => value !== null)),
+  );
+  const yMaximum = Math.ceil(maximumValue / 20) * 20;
+  const xPosition = (index) =>
+    chartPadding.left +
+    (dayLabels.length > 1 ? (index / (dayLabels.length - 1)) * plotWidth : 0);
+  const yPosition = (value) =>
+    chartPadding.top + plotHeight - (value / yMaximum) * plotHeight;
+  const hasChartData = series.some((item) =>
+    item.values.some((value) => value !== null),
+  );
+
+  const getSeriesPath = (values) => {
+    let hasStarted = false;
+
+    return values.reduce((path, value, index) => {
+      if (value === null) {
+        hasStarted = false;
+        return path;
+      }
+
+      const command = hasStarted ? "L" : "M";
+      hasStarted = true;
+      return `${path}${command}${xPosition(index)},${yPosition(value)} `;
+    }, "");
+  };
+
+  return (
+    <div className="progress-chart" id="progress-chart">
+      <div className="progress-chart-heading">
+        <h3>Grafik Progres Kumulatif</h3>
+        <div className="progress-chart-legend">
+          {series.map((item) => (
+            <span key={item.label}>
+              <i
+                className={item.dashed ? "dashed" : ""}
+                style={{ "--chart-series-color": item.color }}
+              />
+              {item.label}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {hasChartData ? (
+        <div className="progress-chart-scroll">
+          <svg
+            className="progress-chart-svg"
+            viewBox={`0 0 ${chartWidth} ${chartHeight}`}
+            role="img"
+            aria-label="Grafik progres kumulatif rencana dan realisasi"
+          >
+            {[0, 0.25, 0.5, 0.75, 1].map((fraction) => {
+              const value = yMaximum * fraction;
+              const y = yPosition(value);
+
+              return (
+                <g key={fraction}>
+                  <line
+                    x1={chartPadding.left}
+                    x2={chartWidth - chartPadding.right}
+                    y1={y}
+                    y2={y}
+                    className="progress-chart-gridline"
+                  />
+                  <text
+                    x={chartPadding.left - 10}
+                    y={y + 4}
+                    textAnchor="end"
+                    className="progress-chart-axis-label"
+                  >
+                    {value}%
+                  </text>
+                </g>
+              );
+            })}
+
+            {dayLabels.map((day, index) =>
+              index % 5 === 0 || index === dayLabels.length - 1 ? (
+                <text
+                  key={`${day}-${index}`}
+                  x={xPosition(index)}
+                  y={chartHeight - 12}
+                  textAnchor="middle"
+                  className="progress-chart-axis-label"
+                >
+                  {day}
+                </text>
+              ) : null,
+            )}
+
+            {series.map((item) => (
+              <g key={item.label}>
+                <path
+                  d={getSeriesPath(item.values)}
+                  fill="none"
+                  stroke={item.color}
+                  strokeWidth="3"
+                  strokeDasharray={item.dashed ? "8 7" : undefined}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                {item.values.map((value, index) =>
+                  value === null ? null : (
+                    <circle
+                      key={`${item.label}-${index}`}
+                      cx={xPosition(index)}
+                      cy={yPosition(value)}
+                      r="3.5"
+                      fill={item.color}
+                    />
+                  ),
+                )}
+              </g>
+            ))}
+          </svg>
+        </div>
+      ) : (
+        <p className="progress-report-message">
+          Data grafik progres belum tersedia.
+        </p>
+      )}
+    </div>
+  );
+}
+
 function ProjectProgressPage({ projectTitle, onNavigate }) {
   const PROGRESS_CSV_URL =
     "https://docs.google.com/spreadsheets/d/1b484ltGg0Gw1PwUriknvyRLckYZTtvtf/export?format=csv&gid=936134645";
@@ -1195,6 +1362,7 @@ function ProjectProgressPage({ projectTitle, onNavigate }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [progressSearchTerm, setProgressSearchTerm] = useState("");
   const [progressData, setProgressData] = useState(null);
+  const [isChartOpen, setIsChartOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -1429,6 +1597,15 @@ function ProjectProgressPage({ projectTitle, onNavigate }) {
                 </div>
 
                 <div className="progress-table-tools">
+                  <button
+                    type="button"
+                    className="progress-chart-toggle"
+                    aria-expanded={isChartOpen}
+                    aria-controls="progress-chart"
+                    onClick={() => setIsChartOpen((isOpen) => !isOpen)}
+                  >
+                    {isChartOpen ? "Tutup Grafik" : "Buka Grafik"}
+                  </button>
                   <label htmlFor="progress-table-search">Filter item pekerjaan</label>
                   <input
                     id="progress-table-search"
@@ -1443,6 +1620,13 @@ function ProjectProgressPage({ projectTitle, onNavigate }) {
                     {filteredProgressRows.length} dari {progressData.bodyRows.length} item
                   </span>
                 </div>
+
+                {isChartOpen && (
+                  <ProgressChart
+                    dayLabels={progressData.dayLabels}
+                    summaryRows={summaryRows}
+                  />
+                )}
 
                 <div className="progress-sheet-caption">
                   <span>{progressData.monthLabel}</span>
