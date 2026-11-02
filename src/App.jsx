@@ -546,6 +546,7 @@ function App() {
       case "certifications":
         return (
           <ProjectProgressPage
+            key={selectedProjectTitle}
             projectTitle={selectedProjectTitle}
             onNavigate={changePage}
           />
@@ -1179,14 +1180,26 @@ function ProjectProgressPage({ projectTitle, onNavigate }) {
     "https://docs.google.com/spreadsheets/d/1b484ltGg0Gw1PwUriknvyRLckYZTtvtf/export?format=csv&gid=936134645";
   const SPREADSHEET_URL =
     "https://docs.google.com/spreadsheets/d/1b484ltGg0Gw1PwUriknvyRLckYZTtvtf/edit?gid=936134645#gid=936134645";
+  const projectOptions = [
+    "PT Wico Interna",
+    "Villa Kropak Sidemen",
+    "Bambootel View Sawah 3M3",
+    "Bambootel View Sawah 15M3",
+  ];
 
-  const [isProgressExpanded, setIsProgressExpanded] = useState(false);
+  const [selectedProjectName, setSelectedProjectName] = useState(
+    projectTitle || "",
+  );
+  const [searchTerm, setSearchTerm] = useState("");
+  const [progressSearchTerm, setProgressSearchTerm] = useState("");
   const [progressData, setProgressData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const activeProjectName = projectTitle || selectedProjectName;
+
   useEffect(() => {
-    if (!isProgressExpanded || progressData) {
+    if (!activeProjectName || progressData) {
       return undefined;
     }
 
@@ -1257,13 +1270,20 @@ function ProjectProgressPage({ projectTitle, onNavigate }) {
     return () => {
       isMounted = false;
     };
-  }, [isProgressExpanded, progressData]);
+  }, [progressData, activeProjectName]);
 
   const summaryRows = progressData?.bodyRows.filter((row) =>
     /^(rencana harian|kumulatif rencana|realisasi harian|kumulatif realisasi|deviasi)/i.test(
       row[11]?.trim() || "",
     ),
   ) || [];
+  const filteredProgressRows =
+    progressData?.bodyRows.filter((row) =>
+      row.some((cell) =>
+        String(cell).toLowerCase().includes(progressSearchTerm.trim().toLowerCase()),
+      ),
+    ) || [];
+
   const getLatestSummaryValue = (label) => {
     const summaryRow = summaryRows.find((row) =>
       row[11]?.trim().toLowerCase().startsWith(label.toLowerCase()),
@@ -1273,41 +1293,98 @@ function ProjectProgressPage({ projectTitle, onNavigate }) {
     return dailyValues?.[dailyValues.length - 1] || "—";
   };
 
+  const filteredProjects = projectOptions.filter((project) =>
+    project.toLowerCase().includes(searchTerm.trim().toLowerCase()),
+  );
+
+  const handleProjectSelect = (projectName) => {
+    setSelectedProjectName(projectName);
+    setProgressData(null);
+    setProgressSearchTerm("");
+    setError("");
+    onNavigate("certifications", projectName);
+  };
+
+  const projectPicker = (
+    <div className="progress-project-switcher">
+      <label htmlFor="progress-project-search">Filter Project</label>
+      <input
+        id="progress-project-search"
+        type="search"
+        value={searchTerm}
+        onChange={(event) => setSearchTerm(event.target.value)}
+        placeholder="Cari nama project..."
+      />
+      <p className="bast-project-count" aria-live="polite">
+        Menampilkan {filteredProjects.length} dari {projectOptions.length} project
+      </p>
+
+      {filteredProjects.length > 0 ? (
+        <div className="progress-project-switcher-list">
+          {filteredProjects.map((project) => (
+            <button
+              key={project}
+              type="button"
+              className={`progress-project-switcher-item ${
+                activeProjectName === project ? "active" : ""
+              }`}
+              onClick={() => handleProjectSelect(project)}
+            >
+              <span>{project}</span>
+              <span aria-hidden="true">→</span>
+            </button>
+          ))}
+        </div>
+      ) : (
+        <p className="bast-report-message bast-project-empty">
+          Project dengan nama “{searchTerm}” tidak ditemukan.
+        </p>
+      )}
+    </div>
+  );
+
+  if (!activeProjectName) {
+    return (
+      <section className="progress-report-page">
+        <div className="section-container">
+          <div className="bast-report-heading">
+            <div>
+              <span className="achievement-label">DAFTAR PROJECT</span>
+              <h2>Pilih Project</h2>
+            </div>
+            <a
+              className="progress-source-link"
+              href={SPREADSHEET_URL}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Spreadsheet ↗
+            </a>
+          </div>
+
+          {projectPicker}
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="progress-report-page">
       <div className="section-container">
-        <div className="progress-report-heading">
-          <div>
-            <span className="achievement-label">PROJECT</span>
-            <button
-              type="button"
-              className="progress-project-toggle"
-              aria-expanded={isProgressExpanded}
-              onClick={() => setIsProgressExpanded((expanded) => !expanded)}
-            >
-              <h3>{projectTitle || "PT Wico Interna"}</h3>
-              <span aria-hidden="true">
-                {isProgressExpanded ? "−" : "+"}
-              </span>
-            </button>
-            <p>
-              {isProgressExpanded
-                ? "Klik judul proyek untuk menyembunyikan data progres."
-                : "Klik judul proyek untuk melihat data progres."}
-            </p>
-          </div>
+        <div className="progress-report-toolbar">
           <a
             className="progress-source-link"
             href={SPREADSHEET_URL}
             target="_blank"
             rel="noreferrer"
           >
-            Buka Spreadsheet ↗
+            Spreadsheet ↗
           </a>
         </div>
 
-        {isProgressExpanded && (
-          <div className="progress-report-content">
+        {projectPicker}
+
+        <div className="progress-report-content">
             {loading && (
               <p className="progress-report-message">
                 Memuat data progres...
@@ -1322,110 +1399,137 @@ function ProjectProgressPage({ projectTitle, onNavigate }) {
 
             {!loading && !error && progressData && (
               <>
-            <div className="progress-summary">
-              <article>
-                <span>RENCANA KUMULATIF</span>
-                <strong>{getLatestSummaryValue("kumulatif rencana")}</strong>
-              </article>
-              <article>
-                <span>REALISASI KUMULATIF</span>
-                <strong>
-                  {getLatestSummaryValue("kumulatif realisasi")}
-                </strong>
-              </article>
-              <article>
-                <span>DEVIASI</span>
-                <strong>{getLatestSummaryValue("deviasi")}</strong>
-              </article>
-            </div>
+                <div className="progress-summary">
+                  <article>
+                    <span>RENCANA KUMULATIF</span>
+                    <strong>{getLatestSummaryValue("kumulatif rencana")}</strong>
+                  </article>
+                  <article>
+                    <span>REALISASI KUMULATIF</span>
+                    <strong>
+                      {getLatestSummaryValue("kumulatif realisasi")}
+                    </strong>
+                  </article>
+                  <article>
+                    <span>DEVIASI</span>
+                    <strong>{getLatestSummaryValue("deviasi")}</strong>
+                  </article>
+                </div>
 
-            <div className="progress-sheet-caption">
-              <span>{progressData.monthLabel}</span>
-              <span>M PRJ DIMA</span>
-            </div>
+                <div className="progress-table-tools">
+                  <label htmlFor="progress-table-search">Filter item pekerjaan</label>
+                  <input
+                    id="progress-table-search"
+                    type="search"
+                    value={progressSearchTerm}
+                    onChange={(event) =>
+                      setProgressSearchTerm(event.target.value)
+                    }
+                    placeholder="Cari uraian, satuan, bobot, atau nilai..."
+                  />
+                  <span aria-live="polite">
+                    {filteredProgressRows.length} dari {progressData.bodyRows.length} item
+                  </span>
+                </div>
 
-            <div className="progress-table-scroll">
-              <table className="progress-table">
-                <thead>
-                  <tr>
-                    <th rowSpan="2">NO</th>
-                    <th rowSpan="2">URAIAN PEKERJAAN</th>
-                    <th rowSpan="2">SATUAN</th>
-                    <th rowSpan="2">VOLUME</th>
-                    <th rowSpan="2">BOBOT</th>
-                    <th colSpan={progressData.dayLabels.length}>
-                      {progressData.monthLabel}
-                    </th>
-                    <th rowSpan="2">TOTAL</th>
-                  </tr>
-                  <tr>
-                    {progressData.dayLabels.map((day, index) => (
-                      <th key={`${day}-${index}`}>{day}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {progressData.bodyRows.map((row, rowIndex) => {
-                    const isSummary = /^(rencana harian|kumulatif rencana|realisasi harian|kumulatif realisasi|deviasi)/i.test(
-                      row[11]?.trim() || "",
-                    );
-                    const isSection =
-                      Boolean(row[1]?.trim()) &&
-                      !row[10]?.trim() &&
-                      !row[11]?.trim() &&
-                      !row[12]?.trim() &&
-                      Boolean(row[9]?.trim());
-                    const description = isSummary
-                      ? row[11].trim()
-                      : row
-                          .slice(2, isSection ? 9 : 10)
-                          .map((cell) => cell.trim())
-                          .filter(Boolean)
-                          .join(" ");
-                    const isTotal =
-                      !row[1]?.trim() &&
-                      !description &&
-                      row[12]?.trim() === "100,00%";
-                    const dailyCells = progressData.dayLabels.map(
-                      (_, dayIndex) => row[13 + dayIndex] || "",
-                    );
+                <div className="progress-sheet-caption">
+                  <span>{progressData.monthLabel}</span>
+                  <span>M PRJ DIMA</span>
+                </div>
 
-                    return (
-                      <tr
-                        key={`progress-${rowIndex}`}
-                        className={[
-                          isSection ? "progress-section-row" : "",
-                          isSummary ? "progress-summary-row" : "",
-                          isTotal ? "progress-total-row" : "",
-                        ]
-                          .filter(Boolean)
-                          .join(" ")}
-                      >
-                        <td>{row[1]?.trim() || ""}</td>
-                        <td>{description || (isTotal ? "TOTAL BOBOT" : "")}</td>
-                        <td>{isSummary ? "" : row[10]?.trim() || ""}</td>
-                        <td>{isSummary ? "" : row[11]?.trim() || ""}</td>
-                        <td>
-                          {isSummary
-                            ? ""
-                            : isSection
-                            ? row[9]?.trim()
-                            : row[12]?.trim() || ""}
-                        </td>
-                        {dailyCells.map((cell, dayIndex) => (
-                          <td key={`day-${dayIndex}`}>{cell.trim()}</td>
-                        ))}
-                        <td>{row[44]?.trim() || ""}</td>
+                <div className="progress-table-scroll">
+                  <table className="progress-table">
+                    <thead>
+                      <tr>
+                        <th rowSpan="2">NO</th>
+                        <th rowSpan="2">URAIAN PEKERJAAN</th>
+                        <th rowSpan="2">SATUAN</th>
+                        <th rowSpan="2">VOLUME</th>
+                        <th rowSpan="2">BOBOT</th>
+                        <th colSpan={progressData.dayLabels.length}>
+                          {progressData.monthLabel}
+                        </th>
+                        <th rowSpan="2">TOTAL</th>
                       </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+                      <tr>
+                        {progressData.dayLabels.map((day, index) => (
+                          <th key={`${day}-${index}`}>{day}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredProgressRows.map((row, rowIndex) => {
+                        const isSummary = /^(rencana harian|kumulatif rencana|realisasi harian|kumulatif realisasi|deviasi)/i.test(
+                          row[11]?.trim() || "",
+                        );
+                        const isSection =
+                          Boolean(row[1]?.trim()) &&
+                          !row[10]?.trim() &&
+                          !row[11]?.trim() &&
+                          !row[12]?.trim() &&
+                          Boolean(row[9]?.trim());
+                        const description = isSummary
+                          ? row[11].trim()
+                          : row
+                              .slice(2, isSection ? 9 : 10)
+                              .map((cell) => cell.trim())
+                              .filter(Boolean)
+                              .join(" ");
+                        const isTotal =
+                          !row[1]?.trim() &&
+                          !description &&
+                          row[12]?.trim() === "100,00%";
+                        const dailyCells = progressData.dayLabels.map(
+                          (_, dayIndex) => row[13 + dayIndex] || "",
+                        );
+
+                        return (
+                          <tr
+                            key={`progress-${rowIndex}`}
+                            className={[
+                              isSection ? "progress-section-row" : "",
+                              isSummary ? "progress-summary-row" : "",
+                              isTotal ? "progress-total-row" : "",
+                            ]
+                              .filter(Boolean)
+                              .join(" ")}
+                          >
+                            <td>{row[1]?.trim() || ""}</td>
+                            <td>
+                              {description || (isTotal ? "TOTAL BOBOT" : "")}
+                            </td>
+                            <td>{isSummary ? "" : row[10]?.trim() || ""}</td>
+                            <td>{isSummary ? "" : row[11]?.trim() || ""}</td>
+                            <td>
+                              {isSummary
+                                ? ""
+                                : isSection
+                                ? row[9]?.trim()
+                                : row[12]?.trim() || ""}
+                            </td>
+                            {dailyCells.map((cell, dayIndex) => (
+                              <td key={`day-${dayIndex}`}>{cell.trim()}</td>
+                            ))}
+                            <td>{row[44]?.trim() || ""}</td>
+                          </tr>
+                        );
+                      })}
+                      {filteredProgressRows.length === 0 && (
+                        <tr>
+                          <td
+                            className="progress-empty-row"
+                            colSpan={progressData.dayLabels.length + 6}
+                          >
+                            Tidak ada item yang cocok dengan pencarian.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </>
             )}
-          </div>
-        )}
+        </div>
 
         <button
           type="button"
