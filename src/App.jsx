@@ -114,6 +114,8 @@ const normalizeProjectName = (value) =>
     .toLowerCase()
     .replace(/[^a-z0-9]/g, "");
 
+const PROGRESS_DATA_PROJECT = "PT Wico Interna";
+
 /* =========================================================
    NAVIGATION
 ========================================================= */
@@ -1197,9 +1199,12 @@ function ProjectProgressPage({ projectTitle, onNavigate }) {
   const [error, setError] = useState("");
 
   const activeProjectName = projectTitle || selectedProjectName;
+  const hasProgressData =
+    normalizeProjectName(activeProjectName) ===
+    normalizeProjectName(PROGRESS_DATA_PROJECT);
 
   useEffect(() => {
-    if (!activeProjectName || progressData) {
+    if (!hasProgressData || progressData) {
       return undefined;
     }
 
@@ -1270,7 +1275,7 @@ function ProjectProgressPage({ projectTitle, onNavigate }) {
     return () => {
       isMounted = false;
     };
-  }, [progressData, activeProjectName]);
+  }, [progressData, hasProgressData]);
 
   const summaryRows = progressData?.bodyRows.filter((row) =>
     /^(rencana harian|kumulatif rencana|realisasi harian|kumulatif realisasi|deviasi)/i.test(
@@ -1394,6 +1399,13 @@ function ProjectProgressPage({ projectTitle, onNavigate }) {
             {!loading && error && (
               <p className="progress-report-message progress-report-error">
                 {error}
+              </p>
+            )}
+
+            {!loading && !error && !progressData && (
+              <p className="progress-report-message">
+                Data progres untuk project ini belum tersedia. Saat ini data
+                progres baru tersedia untuk {PROGRESS_DATA_PROJECT}.
               </p>
             )}
 
