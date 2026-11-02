@@ -179,8 +179,8 @@ function App() {
     () => getRouteFromLocation().projectTitle,
   );
 
-  const [awards, setAwards] = useState([]);
-  const [leadership, setLeadership] = useState(null);
+  const [, setAwards] = useState([]);
+  const [, setLeadership] = useState(null);
 
   const [selectedAward, setSelectedAward] = useState(null);
   /* =======================================================
