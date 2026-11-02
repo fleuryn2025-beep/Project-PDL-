@@ -1609,11 +1609,10 @@ function ProjectProgressPage({ projectTitle, onNavigate }) {
                   <button
                     type="button"
                     className="progress-chart-back"
-                    disabled={!isChartOpen}
                     onClick={() => setIsChartOpen(false)}
-                    aria-label="Kembali ke tampilan sederhana"
+                    aria-label="Tutup grafik"
                   >
-                    ← Kembali
+                    Tutup
                   </button>
                   <label htmlFor="progress-table-search">Filter item pekerjaan</label>
                   <input

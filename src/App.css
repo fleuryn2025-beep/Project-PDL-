@@ -2033,14 +2033,9 @@ a {
     color 0.2s ease;
 }
 
-.progress-chart-back:hover:not(:disabled) {
+.progress-chart-back:hover {
   border-color: var(--accent);
   color: var(--accent-light);
-}
-
-.progress-chart-back:disabled {
-  cursor: not-allowed;
-  opacity: 0.45;
 }
 
 .progress-chart {
