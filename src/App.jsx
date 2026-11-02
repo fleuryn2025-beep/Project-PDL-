@@ -1363,6 +1363,7 @@ function ProjectProgressPage({ projectTitle, onNavigate }) {
   const [progressSearchTerm, setProgressSearchTerm] = useState("");
   const [progressData, setProgressData] = useState(null);
   const [isChartOpen, setIsChartOpen] = useState(false);
+  const [isProgressTableOpen, setIsProgressTableOpen] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -1602,15 +1603,26 @@ function ProjectProgressPage({ projectTitle, onNavigate }) {
                     className="progress-chart-toggle"
                     aria-expanded={isChartOpen}
                     aria-controls="progress-chart"
-                    onClick={() => setIsChartOpen((isOpen) => !isOpen)}
+                    onClick={() => {
+                      if (!isProgressTableOpen) {
+                        setIsProgressTableOpen(true);
+                        setIsChartOpen(true);
+                        return;
+                      }
+
+                      setIsChartOpen((isOpen) => !isOpen);
+                    }}
                   >
                     {isChartOpen ? "Tutup Grafik" : "Buka Grafik"}
                   </button>
                   <button
                     type="button"
                     className="progress-chart-back"
-                    onClick={() => setIsChartOpen(false)}
-                    aria-label="Tutup grafik"
+                    onClick={() => {
+                      setIsChartOpen(false);
+                      setIsProgressTableOpen(false);
+                    }}
+                    aria-label="Tutup tabel dan grafik"
                   >
                     Tutup
                   </button>
@@ -1629,20 +1641,22 @@ function ProjectProgressPage({ projectTitle, onNavigate }) {
                   </span>
                 </div>
 
-                {isChartOpen && (
-                  <ProgressChart
-                    dayLabels={progressData.dayLabels}
-                    summaryRows={summaryRows}
-                  />
-                )}
+                {isProgressTableOpen && (
+                  <>
+                    {isChartOpen && (
+                      <ProgressChart
+                        dayLabels={progressData.dayLabels}
+                        summaryRows={summaryRows}
+                      />
+                    )}
 
-                <div className="progress-sheet-caption">
-                  <span>{progressData.monthLabel}</span>
-                  <span>M PRJ DIMA</span>
-                </div>
+                    <div className="progress-sheet-caption">
+                      <span>{progressData.monthLabel}</span>
+                      <span>M PRJ DIMA</span>
+                    </div>
 
-                <div className="progress-table-scroll">
-                  <table className="progress-table">
+                    <div className="progress-table-scroll">
+                      <table className="progress-table">
                     <thead>
                       <tr>
                         <th rowSpan="2">NO</th>
@@ -1729,8 +1743,10 @@ function ProjectProgressPage({ projectTitle, onNavigate }) {
                         </tr>
                       )}
                     </tbody>
-                  </table>
-                </div>
+                      </table>
+                    </div>
+                  </>
+                )}
               </>
             )}
         </div>
